@@ -214,7 +214,6 @@ class _createVoteScreenState extends State<createVoteScreen> {
         SizedBox(
           height: 20,
         ),
-        Text(str),
         TextField(
           keyboardType: TextInputType.multiline,
           maxLines: null,

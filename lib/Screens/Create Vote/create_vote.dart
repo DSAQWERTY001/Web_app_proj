@@ -3,9 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:web_prototype/Screens/Components/app_bar.dart';
 import 'package:web_prototype/Screens/Components/dynamic_textfields.dart';
 import 'package:web_prototype/Screens/Components/voteappbar.dart';
-
 import '../Components/ฺButton.dart';
 import '../Home/home_screen.dart';
+import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
 class createVoteScreen extends StatefulWidget {
   const createVoteScreen({Key? key}) : super(key: key);
@@ -114,6 +114,56 @@ class _createVoteScreenState extends State<createVoteScreen> {
                         },
                         bColor: Colors.red,
                         tColor: Colors.white,
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 100,
+                  child: Column(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () async {
+                          List<DateTime>? dateTimeList =
+                              await showOmniDateTimeRangePicker(
+                            context: context,
+                            primaryColor: Colors.blue,
+                            backgroundColor: Colors.white,
+                            calendarTextColor: Colors.black,
+                            tabTextColor: Colors.black,
+                            unselectedTabBackgroundColor: Colors.grey,
+                            buttonTextColor: Colors.black,
+                            timeSpinnerTextStyle: const TextStyle(
+                                color: Colors.grey, fontSize: 18),
+                            timeSpinnerHighlightedTextStyle: const TextStyle(
+                                color: Colors.black, fontSize: 24),
+                            is24HourMode: true,
+                            isShowSeconds: false,
+                            startInitialDate: DateTime.now(),
+                            startFirstDate: DateTime(1600)
+                                .subtract(const Duration(days: 3652)),
+                            startLastDate: DateTime.now().add(
+                              const Duration(days: 3652),
+                            ),
+                            endInitialDate: DateTime.now(),
+                            endFirstDate: DateTime(1600)
+                                .subtract(const Duration(days: 3652)),
+                            endLastDate: DateTime.now().add(
+                              const Duration(days: 3652),
+                            ),
+                            borderRadius: const Radius.circular(30),
+                          );
+                        },
+                        child: Container(
+                          child: Row(children: [
+                            Icon(Icons.calendar_month_outlined),
+                          ]),
+                        ),
                       ),
                     ],
                   ),

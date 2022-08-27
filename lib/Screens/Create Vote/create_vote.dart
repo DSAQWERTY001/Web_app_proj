@@ -4,6 +4,7 @@ import 'package:web_prototype/Screens/Components/app_bar.dart';
 import 'package:web_prototype/Screens/Components/dynamic_textfields.dart';
 import 'package:web_prototype/Screens/Components/voteappbar.dart';
 
+import '../Components/ฺButton.dart';
 import '../Home/home_screen.dart';
 
 class createVoteScreen extends StatefulWidget {
@@ -85,50 +86,34 @@ class _createVoteScreenState extends State<createVoteScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(25),
-                        child: FlatButton(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 25, vertical: 15),
-                          color: Colors.blue,
-                          onPressed: () {
-                            setState(() {
-                              _count++;
-                            });
-                          },
-                          child: Text(
-                            "Add",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
+                      RButton(
+                        str: "Add",
+                        press: () {
+                          setState(() {
+                            _count++;
+                          });
+                        },
+                        bColor: Colors.blue,
+                        tColor: Colors.white,
                       ),
                       SizedBox(
                         width: 5,
                       ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(25),
-                        child: FlatButton(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 25, vertical: 15),
-                          color: Colors.red,
-                          onPressed: () {
-                            setState(() {
-                              if (_count > 0) {
-                                _count--;
-                              }
-                            });
-                          },
-                          child: Text(
-                            "Delete",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
+                      RButton(
+                        str: "Delete",
+                        press: () {
+                          setState(
+                            () {
+                              setState(() {
+                                if (_count > 0) {
+                                  _count--;
+                                }
+                              });
+                            },
+                          );
+                        },
+                        bColor: Colors.red,
+                        tColor: Colors.white,
                       ),
                     ],
                   ),
@@ -167,28 +152,17 @@ class _createVoteScreenState extends State<createVoteScreen> {
                                 Container(
                                   width: 10,
                                 ),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(25),
-                                  child: FlatButton(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 25, vertical: 15),
-                                    color: Colors.white,
-                                    onPressed: () {
+                                RButton(
+                                    str: "Cancel Event",
+                                    press: () {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => HomeScreen()),
                                       );
                                     },
-                                    child: Text(
-                                      "Cancel Event",
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                )
+                                    bColor: Colors.white,
+                                    tColor: Colors.red),
                               ],
                             ),
                             Container(
@@ -227,7 +201,7 @@ class _createVoteScreenState extends State<createVoteScreen> {
               borderSide: BorderSide(color: Colors.amber, width: 2),
               borderRadius: BorderRadius.all(Radius.circular(22)),
             ),
-            labelText: 'cadidate',
+            labelText: 'candidate',
             labelStyle: TextStyle(color: Colors.blue),
             icon: Icon(
               Icons.person_outline,

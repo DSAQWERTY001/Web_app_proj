@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       title: 'Vote Web Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
-      home: HomeScreen(),
+      home: createVoteScreen(),
     );
   }
 }

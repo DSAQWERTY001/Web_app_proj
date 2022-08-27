@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:web_prototype/Screens/Components/%E0%B8%BAButton.dart';
 
 import '../Home/home_screen.dart';
 import 'login_state.dart';
@@ -40,27 +41,17 @@ class _MyWidgetState extends State<MyWidget> {
             ),
           ),
           Spacer(),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(25),
-            child: FlatButton(
-              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-              color: Colors.white,
-              onPressed: () {
+          RButton(
+              str: "logout".toUpperCase(),
+              press: () {
                 GlobalValues.setLoginStatus(false);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => HomeScreen()),
                 );
               },
-              child: Text(
-                "logout".toUpperCase(),
-                style: TextStyle(
-                  color: Colors.blue,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          )
+              bColor: Colors.white,
+              tColor: Colors.blue),
         ],
       ),
     );

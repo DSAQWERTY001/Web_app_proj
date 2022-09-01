@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:web_prototype/Screens/Components/ButtonIcon.dart';
 import 'package:web_prototype/Screens/Components/app_bar.dart';
 import 'package:web_prototype/Screens/Components/dynamic_textfields.dart';
 import 'package:web_prototype/Screens/Components/voteappbar.dart';
@@ -38,6 +39,9 @@ class _createVoteScreenState extends State<createVoteScreen> {
                   width: 600,
                   child: Column(
                     children: [
+                      SizedBox(
+                        height: 100,
+                      ),
                       TextField(
                         style: TextStyle(fontSize: 16, color: Colors.blue),
                         decoration: const InputDecoration(
@@ -131,9 +135,9 @@ class _createVoteScreenState extends State<createVoteScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      RButton(
+                      RButtonIcon(
                         str:
-                            '${dateTime.day}/${dateTime.month}/${dateTime.year}',
+                            '${dateTime.day} / ${dateTime.month} / ${dateTime.year}',
                         press: () async {
                           final date = await pickDate();
                           if (date == null) return;
@@ -141,23 +145,30 @@ class _createVoteScreenState extends State<createVoteScreen> {
                         },
                         bColor: Colors.blue,
                         tColor: Colors.white,
+                        bIcon: Icons.calendar_month_outlined,
+                        iColor: Colors.white,
                       ),
                       SizedBox(
-                        width: 20,
+                        width: 5,
                       ),
-                      ElevatedButton(
-                          onPressed: () async {
-                            final time = await pickTime();
-                            if (time == null) return;
-                            final newDateTime = DateTime(
-                                dateTime.year,
-                                dateTime.month,
-                                dateTime.day,
-                                time.hour,
-                                time.minute);
-                            setState(() => dateTime = newDateTime);
-                          },
-                          child: Text('$hours:$minutes')),
+                      RButtonIcon(
+                        str: '$hours : $minutes',
+                        press: () async {
+                          final time = await pickTime();
+                          if (time == null) return;
+                          final newDateTime = DateTime(
+                              dateTime.year,
+                              dateTime.month,
+                              dateTime.day,
+                              time.hour,
+                              time.minute);
+                          setState(() => dateTime = newDateTime);
+                        },
+                        bColor: Colors.blue,
+                        tColor: Colors.white,
+                        bIcon: Icons.access_time,
+                        iColor: Colors.white,
+                      ),
                     ],
                   ),
                 )
@@ -204,8 +215,8 @@ class _createVoteScreenState extends State<createVoteScreen> {
                                             builder: (context) => HomeScreen()),
                                       );
                                     },
-                                    bColor: Colors.white,
-                                    tColor: Colors.red),
+                                    bColor: Colors.red,
+                                    tColor: Colors.white),
                               ],
                             ),
                             Container(

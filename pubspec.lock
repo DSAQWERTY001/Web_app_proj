@@ -43,13 +43,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.16.0"
-  cr_calendar:
-    dependency: "direct main"
-    description:
-      name: cr_calendar
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.10"
   crypto:
     dependency: transitive
     description:
@@ -90,13 +83,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_datetime_picker:
-    dependency: "direct main"
-    description:
-      name: flutter_datetime_picker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.5.1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -130,20 +116,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.1"
-  intl:
-    dependency: transitive
-    description:
-      name: intl
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.17.0"
-  jiffy:
-    dependency: transitive
-    description:
-      name: jiffy
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "5.0.0"
   lints:
     dependency: transitive
     description:
@@ -172,13 +144,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
-  omni_datetime_picker:
-    dependency: "direct main"
-    description:
-      name: omni_datetime_picker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.2"
   path:
     dependency: transitive
     description:
@@ -256,20 +221,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.4"
-  scroll_date_picker:
-    dependency: "direct main"
-    description:
-      name: scroll_date_picker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.6.0"
-  scrollable_positioned_list:
-    dependency: transitive
-    description:
-      name: scrollable_positioned_list
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.3"
   sky_engine:
     dependency: transitive
     description: flutter

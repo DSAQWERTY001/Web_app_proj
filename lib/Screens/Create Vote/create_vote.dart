@@ -43,6 +43,8 @@ class _createVoteScreenState extends State<createVoteScreen> {
                         height: 100,
                       ),
                       TextField(
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
                         style: TextStyle(fontSize: 16, color: Colors.blue),
                         decoration: const InputDecoration(
                           enabledBorder: OutlineInputBorder(
@@ -62,6 +64,38 @@ class _createVoteScreenState extends State<createVoteScreen> {
                             color: Colors.blue,
                           ),
                         ),
+                      ),
+                      SizedBox(height: 20),
+                      TextField(
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        style: TextStyle(fontSize: 16, color: Colors.blue),
+                        decoration: const InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.blue, width: 2),
+                            borderRadius: BorderRadius.all(Radius.circular(22)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.amber, width: 2),
+                            borderRadius: BorderRadius.all(Radius.circular(22)),
+                          ),
+                          labelText: "Event Description",
+                          labelStyle: TextStyle(color: Colors.blue),
+                          icon: Icon(
+                            Icons.description_outlined,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Divider(
+                        color: Colors.black87,
+                        endIndent: 15,
+                        indent: 55,
                       ),
                       _addTextfields("candidate"),
                       _addTextfields("candidate"),
@@ -137,7 +171,7 @@ class _createVoteScreenState extends State<createVoteScreen> {
                     children: [
                       RButtonIcon(
                         str:
-                            '${dateTime.day} / ${dateTime.month} / ${dateTime.year}',
+                            '${dateTime.day}/${dateTime.month}/${dateTime.year}',
                         press: () async {
                           final date = await pickDate();
                           if (date == null) return;
@@ -240,7 +274,7 @@ class _createVoteScreenState extends State<createVoteScreen> {
     return Column(
       children: [
         SizedBox(
-          height: 20,
+          height: 10,
         ),
         TextField(
           keyboardType: TextInputType.multiline,
@@ -262,6 +296,9 @@ class _createVoteScreenState extends State<createVoteScreen> {
               color: Colors.blue,
             ),
           ),
+        ),
+        SizedBox(
+          height: 10,
         ),
       ],
     );

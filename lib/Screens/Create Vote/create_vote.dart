@@ -5,7 +5,6 @@ import 'package:web_prototype/Screens/Components/dynamic_textfields.dart';
 import 'package:web_prototype/Screens/Components/voteappbar.dart';
 import '../Components/ฺButton.dart';
 import '../Home/home_screen.dart';
-import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
 class createVoteScreen extends StatefulWidget {
   const createVoteScreen({Key? key}) : super(key: key);
@@ -16,6 +15,7 @@ class createVoteScreen extends StatefulWidget {
 
 class _createVoteScreenState extends State<createVoteScreen> {
   late int _count;
+  DateTime dateTime = DateTime.now();
   @override
   void initState() {
     // TODO: implement initState
@@ -25,6 +25,8 @@ class _createVoteScreenState extends State<createVoteScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final hours = dateTime.hour.toString().padLeft(2, '0');
+    final minutes = dateTime.minute.toString().padLeft(2, '0');
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -82,7 +84,7 @@ class _createVoteScreenState extends State<createVoteScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: 600,
+                  width: 500,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -104,11 +106,9 @@ class _createVoteScreenState extends State<createVoteScreen> {
                         press: () {
                           setState(
                             () {
-                              setState(() {
-                                if (_count > 0) {
-                                  _count--;
-                                }
-                              });
+                              if (_count > 0) {
+                                _count--;
+                              }
                             },
                           );
                         },
@@ -120,51 +120,44 @@ class _createVoteScreenState extends State<createVoteScreen> {
                 )
               ],
             ),
+            SizedBox(
+              height: 20,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: 100,
-                  child: Column(
+                  width: 500,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ElevatedButton(
-                        onPressed: () async {
-                          List<DateTime>? dateTimeList =
-                              await showOmniDateTimeRangePicker(
-                            context: context,
-                            primaryColor: Colors.blue,
-                            backgroundColor: Colors.white,
-                            calendarTextColor: Colors.black,
-                            tabTextColor: Colors.black,
-                            unselectedTabBackgroundColor: Colors.grey,
-                            buttonTextColor: Colors.black,
-                            timeSpinnerTextStyle: const TextStyle(
-                                color: Colors.grey, fontSize: 18),
-                            timeSpinnerHighlightedTextStyle: const TextStyle(
-                                color: Colors.black, fontSize: 24),
-                            is24HourMode: true,
-                            isShowSeconds: false,
-                            startInitialDate: DateTime.now(),
-                            startFirstDate: DateTime(1600)
-                                .subtract(const Duration(days: 3652)),
-                            startLastDate: DateTime.now().add(
-                              const Duration(days: 3652),
-                            ),
-                            endInitialDate: DateTime.now(),
-                            endFirstDate: DateTime(1600)
-                                .subtract(const Duration(days: 3652)),
-                            endLastDate: DateTime.now().add(
-                              const Duration(days: 3652),
-                            ),
-                            borderRadius: const Radius.circular(30),
-                          );
+                      RButton(
+                        str:
+                            '${dateTime.day}/${dateTime.month}/${dateTime.year}',
+                        press: () async {
+                          final date = await pickDate();
+                          if (date == null) return;
+                          setState(() => dateTime = date);
                         },
-                        child: Container(
-                          child: Row(children: [
-                            Icon(Icons.calendar_month_outlined),
-                          ]),
-                        ),
+                        bColor: Colors.blue,
+                        tColor: Colors.white,
                       ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      ElevatedButton(
+                          onPressed: () async {
+                            final time = await pickTime();
+                            if (time == null) return;
+                            final newDateTime = DateTime(
+                                dateTime.year,
+                                dateTime.month,
+                                dateTime.day,
+                                time.hour,
+                                time.minute);
+                            setState(() => dateTime = newDateTime);
+                          },
+                          child: Text('$hours:$minutes')),
                     ],
                   ),
                 )
@@ -262,4 +255,13 @@ class _createVoteScreenState extends State<createVoteScreen> {
       ],
     );
   }
+
+  Future<DateTime?> pickDate() => showDatePicker(
+      context: context,
+      initialDate: dateTime,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2100));
+  Future<TimeOfDay?> pickTime() => showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: dateTime.hour, minute: dateTime.minute));
 }

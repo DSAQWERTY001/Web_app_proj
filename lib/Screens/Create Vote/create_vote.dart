@@ -16,7 +16,8 @@ class createVoteScreen extends StatefulWidget {
 
 class _createVoteScreenState extends State<createVoteScreen> {
   late int _count;
-  DateTime dateTime = DateTime.now();
+  DateTime SdateTime = DateTime.now();
+  DateTime EdateTime = DateTime.now();
   @override
   void initState() {
     // TODO: implement initState
@@ -26,8 +27,13 @@ class _createVoteScreenState extends State<createVoteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final hours = dateTime.hour.toString().padLeft(2, '0');
-    final minutes = dateTime.minute.toString().padLeft(2, '0');
+    final hours = SdateTime.hour.toString().padLeft(2, '0');
+    final minutes = SdateTime.minute.toString().padLeft(2, '0');
+    final Ehours = EdateTime.hour.toString().padLeft(2, '0');
+    final Eminutes = EdateTime.minute.toString().padLeft(2, '0');
+    final deferDay = defDay(SdateTime, EdateTime);
+    final deferTime = defTime(SdateTime, EdateTime);
+    final deferTimeMinute = defTimeMinutes(SdateTime, EdateTime);
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -42,6 +48,7 @@ class _createVoteScreenState extends State<createVoteScreen> {
                       SizedBox(
                         height: 100,
                       ),
+                      //สร้าง textfield ,event name,Event Description,candidate
                       TextField(
                         keyboardType: TextInputType.multiline,
                         maxLines: null,
@@ -118,6 +125,7 @@ class _createVoteScreenState extends State<createVoteScreen> {
             SizedBox(
               height: 20,
             ),
+            //ปุ่มสำหรับการเพิ่มและลบ textfield candidate ที่เพิ่มขี้นมา
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -161,6 +169,7 @@ class _createVoteScreenState extends State<createVoteScreen> {
             SizedBox(
               height: 20,
             ),
+            //เวลาเริ่มของ event
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -169,13 +178,26 @@ class _createVoteScreenState extends State<createVoteScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      Text(
+                        'Start   :  ',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue),
+                      ),
+                      SizedBox(
+                        width: 40,
+                      ),
                       RButtonIcon(
                         str:
-                            '${dateTime.day}/${dateTime.month}/${dateTime.year}',
+                            '${SdateTime.day}/${SdateTime.month}/${SdateTime.year}',
                         press: () async {
                           final date = await pickDate();
-                          if (date == null) return;
-                          setState(() => dateTime = date);
+                          if (date == DateTime.now())
+                            return setState(() => SdateTime = DateTime.now());
+                          if (date == null ||
+                              date.isBefore(DateTime.now()) == true) return;
+                          setState(() => SdateTime = date);
                         },
                         bColor: Colors.blue,
                         tColor: Colors.white,
@@ -191,12 +213,12 @@ class _createVoteScreenState extends State<createVoteScreen> {
                           final time = await pickTime();
                           if (time == null) return;
                           final newDateTime = DateTime(
-                              dateTime.year,
-                              dateTime.month,
-                              dateTime.day,
+                              SdateTime.year,
+                              SdateTime.month,
+                              SdateTime.day,
                               time.hour,
                               time.minute);
-                          setState(() => dateTime = newDateTime);
+                          setState(() => SdateTime = newDateTime);
                         },
                         bColor: Colors.blue,
                         tColor: Colors.white,
@@ -208,6 +230,71 @@ class _createVoteScreenState extends State<createVoteScreen> {
                 )
               ],
             ),
+            SizedBox(
+              height: 10,
+            ),
+            //เวลาจบของ event
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 500,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'End   :    ',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue),
+                      ),
+                      SizedBox(
+                        width: 40,
+                      ),
+                      RButtonIcon(
+                        str:
+                            '${EdateTime.day}/${EdateTime.month}/${EdateTime.year}',
+                        press: () async {
+                          final date = await pickDate();
+                          if (date == SdateTime)
+                            return setState(() => EdateTime = SdateTime);
+                          if (date == null || date.isBefore(SdateTime) == true)
+                            return;
+                          setState(() => EdateTime = date);
+                        },
+                        bColor: Colors.blue,
+                        tColor: Colors.white,
+                        bIcon: Icons.calendar_month_outlined,
+                        iColor: Colors.white,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      RButtonIcon(
+                        str: '$Ehours : $Eminutes',
+                        press: () async {
+                          final time = await EpickTime();
+                          if (time == null) return;
+                          final newDateTime = DateTime(
+                              EdateTime.year,
+                              EdateTime.month,
+                              EdateTime.day,
+                              time.hour,
+                              time.minute);
+                          setState(() => EdateTime = newDateTime);
+                        },
+                        bColor: Colors.blue,
+                        tColor: Colors.white,
+                        bIcon: Icons.access_time,
+                        iColor: Colors.white,
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            //ปุ่มสำหรับการสร้าง และยกเลิก event
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -270,6 +357,7 @@ class _createVoteScreenState extends State<createVoteScreen> {
     );
   }
 
+  //widget สร้าง textfield candidate
   _addTextfields(String str) {
     return Column(
       children: [
@@ -304,12 +392,41 @@ class _createVoteScreenState extends State<createVoteScreen> {
     );
   }
 
+  //widget การดึงค่าจองเวลา
   Future<DateTime?> pickDate() => showDatePicker(
       context: context,
-      initialDate: dateTime,
+      initialDate: SdateTime,
       firstDate: DateTime(2020),
       lastDate: DateTime(2100));
   Future<TimeOfDay?> pickTime() => showTimePicker(
       context: context,
-      initialTime: TimeOfDay(hour: dateTime.hour, minute: dateTime.minute));
+      initialTime: TimeOfDay(hour: SdateTime.hour, minute: SdateTime.minute));
+  Future<DateTime?> EpickDate() => showDatePicker(
+      context: context,
+      initialDate: SdateTime,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2100));
+  Future<TimeOfDay?> EpickTime() => showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: EdateTime.hour, minute: EdateTime.minute));
+  int defDay(DateTime start, DateTime end) {
+    start = DateTime(start.year, start.month, start.day);
+    end = DateTime(end.year, end.month, end.day);
+    return (end.difference(start).inHours / 24).round();
+  }
+
+  //widget ความต่างของเวลา
+  int defTimeMinutes(DateTime start, DateTime end) {
+    start =
+        DateTime(start.year, start.month, start.day, start.hour, start.minute);
+    end = DateTime(end.year, end.month, end.day, end.hour, end.minute);
+    return (end.difference(start).inMinutes % 60).round();
+  }
+
+  int defTime(DateTime start, DateTime end) {
+    start =
+        DateTime(start.year, start.month, start.day, start.hour, start.minute);
+    end = DateTime(end.year, end.month, end.day, end.hour, end.minute);
+    return (end.difference(start).inHours).round();
+  }
 }

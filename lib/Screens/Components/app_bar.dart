@@ -14,81 +14,53 @@ class VoteAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (GlobalValues.getLoginStatus()) {
-      return Container(
-        margin: EdgeInsets.all(20),
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.blue,
-          borderRadius: BorderRadius.circular(46),
-          boxShadow: [
-            BoxShadow(
-              offset: Offset(0, -2),
-              blurRadius: 30,
-              color: Colors.black.withOpacity(0.16),
+    return Container(
+      margin: EdgeInsets.all(20),
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.blue,
+        borderRadius: BorderRadius.circular(46),
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(0, -2),
+            blurRadius: 30,
+            color: Colors.black.withOpacity(0.16),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Text(
+            "Logo.png",
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Text(
-              "Logo.png",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            Spacer(),
-            InkWell(
-              onTap: () {
+          ),
+          Spacer(),
+          if (GlobalValues.getLoginStatus())
+            (menuItem(
+              title: "Creation Vote",
+              press: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => createVoteScreen()),
                 );
               },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Text(
-                  "Creation vote".toUpperCase(),
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Text(
-                  "home".toUpperCase(),
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Text(
-                  "about us".toUpperCase(),
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-            RButton(
+            )),
+          menuItem(
+            title: "home".toUpperCase(),
+            press: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomeScreen()),
+              );
+            },
+          ),
+          menuItem(title: "about us".toUpperCase(), press: () {}),
+          if (GlobalValues.getLoginStatus())
+            (RButton(
                 str: "logout".toUpperCase(),
                 press: () {
                   GlobalValues.setLoginStatus(false);
@@ -98,69 +70,9 @@ class VoteAppBar extends StatelessWidget {
                   );
                 },
                 bColor: Colors.white,
-                tColor: Colors.blue),
-          ],
-        ),
-      );
-    } else {
-      return Container(
-        margin: EdgeInsets.all(20),
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.blue,
-          borderRadius: BorderRadius.circular(46),
-          boxShadow: [
-            BoxShadow(
-              offset: Offset(0, -2),
-              blurRadius: 30,
-              color: Colors.black.withOpacity(0.16),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Text(
-              "Logo.png",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            Spacer(),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Text(
-                  "home".toUpperCase(),
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Text(
-                  "about us".toUpperCase(),
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-            RButton(
+                tColor: Colors.blue))
+          else
+            (RButton(
                 str: "login".toUpperCase(),
                 press: () {
                   Navigator.push(
@@ -169,10 +81,9 @@ class VoteAppBar extends StatelessWidget {
                   );
                 },
                 bColor: Colors.white,
-                tColor: Colors.blue),
-          ],
-        ),
-      );
-    }
+                tColor: Colors.blue)),
+        ],
+      ),
+    );
   }
 }

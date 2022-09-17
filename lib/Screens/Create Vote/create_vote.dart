@@ -17,16 +17,16 @@ class _createVoteScreenState extends State<createVoteScreen> {
   DateTime SdateTime = DateTime.now();
   DateTime EdateTime = DateTime.now();
   int _page = 0;
-  Widget bodyFunction() {
+  Widget bodyFunction(BuildContext context) {
     switch (_page) {
       case 0:
-        return _bodyCreate();
-        break;
-      case 1:
         return Container(color: Colors.blue);
         break;
-      default:
+      case 1:
         return _bodyCreate();
+        break;
+      default:
+        return Container(color: Colors.blue);
         break;
     }
   }
@@ -55,31 +55,34 @@ class _createVoteScreenState extends State<createVoteScreen> {
                   width: 20,
                 ),
                 RButton(
-                  str: "Create",
+                  str: "Dashboard",
                   press: () {
                     setState(() {
                       _page = 0;
                     });
                   },
-                  bColor: _page == 1 ? Colors.grey.shade200 : Colors.blue,
-                  tColor: _page == 1 ? Colors.blue : Colors.white,
+                  bColor: _page == 0 ? Colors.blue : Colors.grey.shade200,
+                  tColor: _page == 0 ? Colors.white : Colors.blue,
                 ),
                 SizedBox(
                   width: 20,
                 ),
                 RButton(
-                  str: "Dashboard",
+                  str: "Create",
                   press: () {
+                    SdateTime = DateTime.now();
+                    EdateTime = DateTime.now();
+                    _count = 0;
                     setState(() {
                       _page = 1;
                     });
                   },
-                  bColor: _page == 1 ? Colors.blue : Colors.grey.shade200,
-                  tColor: _page == 1 ? Colors.white : Colors.blue,
+                  bColor: _page == 0 ? Colors.grey.shade200 : Colors.blue,
+                  tColor: _page == 0 ? Colors.blue : Colors.white,
                 ),
               ],
             ),
-            bodyFunction(),
+            bodyFunction(context),
           ],
         ),
       ),
@@ -96,7 +99,7 @@ class _createVoteScreenState extends State<createVoteScreen> {
         TextField(
           keyboardType: TextInputType.multiline,
           maxLines: null,
-          style: TextStyle(fontSize: 16, color: Colors.blue),
+          style: TextStyle(fontSize: 16, color: Colors.black),
           decoration: const InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.blue, width: 2),
@@ -107,7 +110,7 @@ class _createVoteScreenState extends State<createVoteScreen> {
               borderRadius: BorderRadius.all(Radius.circular(22)),
             ),
             labelText: 'candidate',
-            labelStyle: TextStyle(color: Colors.blue),
+            labelStyle: TextStyle(color: Color.fromARGB(255, 127, 197, 255)),
             icon: Icon(
               Icons.person_outline,
               color: Colors.blue,
@@ -178,11 +181,19 @@ class _createVoteScreenState extends State<createVoteScreen> {
                   SizedBox(
                     height: 30,
                   ),
+                  Text(
+                    "Event",
+                    style: TextStyle(
+                        color: Colors.blue, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   //สร้าง textfield ,event name,Event Description,candidate
                   TextField(
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
-                    style: TextStyle(fontSize: 16, color: Colors.blue),
+                    style: TextStyle(fontSize: 16, color: Colors.black),
                     decoration: const InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.blue, width: 2),
@@ -193,7 +204,8 @@ class _createVoteScreenState extends State<createVoteScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(22)),
                       ),
                       labelText: "Event Name",
-                      labelStyle: TextStyle(color: Colors.blue),
+                      labelStyle:
+                          TextStyle(color: Color.fromARGB(255, 127, 197, 255)),
                       icon: Icon(
                         Icons.create_new_folder_outlined,
                         color: Colors.blue,
@@ -204,7 +216,7 @@ class _createVoteScreenState extends State<createVoteScreen> {
                   TextField(
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
-                    style: TextStyle(fontSize: 16, color: Colors.blue),
+                    style: TextStyle(fontSize: 16, color: Colors.black),
                     decoration: const InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.blue, width: 2),
@@ -215,7 +227,8 @@ class _createVoteScreenState extends State<createVoteScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(22)),
                       ),
                       labelText: "Event Description",
-                      labelStyle: TextStyle(color: Colors.blue),
+                      labelStyle:
+                          TextStyle(color: Color.fromARGB(255, 127, 197, 255)),
                       icon: Icon(
                         Icons.description_outlined,
                         color: Colors.blue,
@@ -225,10 +238,10 @@ class _createVoteScreenState extends State<createVoteScreen> {
                   SizedBox(
                     height: 10,
                   ),
-                  Divider(
-                    color: Colors.black87,
-                    endIndent: 15,
-                    indent: 55,
+                  Text(
+                    "Candidate",
+                    style: TextStyle(
+                        color: Colors.blue, fontWeight: FontWeight.bold),
                   ),
                   _addTextfields("candidate"),
                   _addTextfields("candidate"),
@@ -249,14 +262,14 @@ class _createVoteScreenState extends State<createVoteScreen> {
           ],
         ),
         SizedBox(
-          height: 20,
+          height: 10,
         ),
         //ปุ่มสำหรับการเพิ่มและลบ textfield candidate ที่เพิ่มขี้นมา
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 500,
+              width: 490,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -293,14 +306,21 @@ class _createVoteScreenState extends State<createVoteScreen> {
           ],
         ),
         SizedBox(
-          height: 20,
+          height: 10,
+        ),
+        Text(
+          "Date & Time",
+          style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+          height: 10,
         ),
         //เวลาเริ่มของ event
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 500,
+              width: 450,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -364,7 +384,7 @@ class _createVoteScreenState extends State<createVoteScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 500,
+              width: 450,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

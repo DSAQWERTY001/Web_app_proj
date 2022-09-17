@@ -4,6 +4,7 @@ import 'package:web_prototype/Screens/Components/app_bar.dart';
 import 'package:web_prototype/Screens/Components/voteappbar.dart';
 import '../Components/ฺButton.dart';
 import '../Home/home_screen.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class createVoteScreen extends StatefulWidget {
   const createVoteScreen({Key? key}) : super(key: key);
@@ -17,16 +18,34 @@ class _createVoteScreenState extends State<createVoteScreen> {
   DateTime SdateTime = DateTime.now();
   DateTime EdateTime = DateTime.now();
   int _page = 0;
+  static List<Faculty> _faculty = [
+    Faculty(id: 1, name: "คณะวิศวกรรมศาสตร์"),
+    Faculty(id: 2, name: "คณะครุศาสตร์อุตสาหกรรม"),
+    Faculty(id: 3, name: "คณะวิทยาศาสตร์ประยุกต์"),
+    Faculty(id: 4, name: "วิทยาลัยเทคโนโลยีอุตสาหกรรม"),
+    Faculty(id: 5, name: "คณะเทคโนโลยีสารสนเทศและนวัตกรรมดิจิทัล"),
+    Faculty(id: 6, name: "คณะศิลปศาสตร์ประยุกต์"),
+    Faculty(id: 7, name: "The Sirindhorn TGGS"),
+    Faculty(id: 8, name: "คณะสถาปัตยกรรมและการออกแบบ"),
+    Faculty(id: 9, name: "วิทยาลัยนานาชาติ"),
+    Faculty(id: 10, name: "คณะพัฒนาธุรกิจและอุตสาหกรรม"),
+    Faculty(id: 11, name: "บัณฑิตวิทยาลัย"),
+  ];
+  final _items = _faculty
+      .map((animal) => MultiSelectItem<Faculty>(animal, animal.name))
+      .toList();
+  List<Faculty> _selectedAnimals2 = [];
+  final _multiSelectKey = GlobalKey<FormFieldState>();
   Widget bodyFunction(BuildContext context) {
     switch (_page) {
       case 0:
-        return Container(color: Colors.blue);
+        return Container();
         break;
       case 1:
         return _bodyCreate();
         break;
       default:
-        return Container(color: Colors.blue);
+        return Container();
         break;
     }
   }
@@ -497,7 +516,66 @@ class _createVoteScreenState extends State<createVoteScreen> {
             ),
           ],
         ),
+        Container(
+          alignment: Alignment.center,
+          width: 300,
+          child: Column(
+            children: <Widget>[
+              MultiSelectDialogField(
+                dialogWidth: MediaQuery.of(context).size.width * 0.25,
+                dialogHeight: MediaQuery.of(context).size.height * 0.25,
+                items: _items,
+                title: Text("Faculty"),
+                selectedColor: Colors.blue,
+                decoration: BoxDecoration(
+                  color: Colors.blue.withOpacity(0.1),
+                  borderRadius: BorderRadius.all(Radius.circular(40)),
+                  border: Border.all(
+                    color: Colors.blue,
+                    width: 2,
+                  ),
+                ),
+                buttonIcon: Icon(
+                  Icons.arrow_drop_down_rounded,
+                  color: Colors.blue,
+                ),
+                buttonText: Text(
+                  "Selete Faculty",
+                  style: TextStyle(
+                    color: Colors.blue[800],
+                    fontSize: 16,
+                  ),
+                ),
+                onConfirm: (values) {
+                  List<Faculty> tempSelectedAnimal = [];
+                  var newValues = values as List<MultiSelectItem<Faculty>>;
+                  newValues.forEach((element) {
+                    tempSelectedAnimal.add(element.value);
+                  });
+                  _selectedAnimals2 = tempSelectedAnimal;
+                },
+                // chipDisplay: MultiSelectChipDisplay(
+                //   onTap: (value) {
+                //     setState(() {
+                //       _selectedAnimals2.remove(value);
+                //     });
+                //   },
+                // ),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
+}
+
+class Faculty {
+  final int id;
+  final String name;
+
+  Faculty({
+    required this.id,
+    required this.name,
+  });
 }

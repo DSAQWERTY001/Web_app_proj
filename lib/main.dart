@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:web_prototype/Screens/Create%20Vote/create_vote.dart';
+import 'package:web_prototype/Screens/Create_Vote/create_vote.dart';
 import 'package:web_prototype/Screens/Home/home_screen.dart';
 
 void main() {

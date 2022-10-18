@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
@@ -6,6 +7,7 @@ import '../Components/ฺButton.dart';
 import '../Home/home_screen.dart';
 
 class CreateBody extends StatefulWidget {
+  static const String route = '/create-vote';
   CreateBody({Key? key}) : super(key: key);
 
   @override
@@ -13,10 +15,12 @@ class CreateBody extends StatefulWidget {
 }
 
 class _CreateBodyState extends State<CreateBody> {
+  CollectionReference data = FirebaseFirestore.instance.collection("Event");
+  List<String> Candidate_name = [];
   DateTime SdateTime = DateTime.now();
   DateTime EdateTime = DateTime.now();
   late int _count;
-  int _page = 0;
+  int addtextIndex = 1;
   String? selectedValue;
   static List<Faculty> _faculty = [
     Faculty(id: 1, name: "คณะครุศาสตร์อุตสาหกรรม"),
@@ -31,7 +35,6 @@ class _CreateBodyState extends State<CreateBody> {
     Faculty(id: 10, name: "คณะพัฒนาธุรกิจและอุตสาหกรรม"),
     Faculty(id: 11, name: "บัณฑิตวิทยาลัย"),
   ];
-  List<String> selected = [];
   final _items = _faculty
       .map((faculty) => MultiSelectItem<Faculty>(faculty, faculty.name))
       .toList();
@@ -53,6 +56,10 @@ class _CreateBodyState extends State<CreateBody> {
     final deferDay = defDay(SdateTime, EdateTime);
     final deferTime = defTime(SdateTime, EdateTime);
     final deferTimeMinute = defTimeMinutes(SdateTime, EdateTime);
+    String EventName = "";
+    String EventDes = "";
+    String can1 = "";
+    String can2 = "";
     return Column(
       children: [
         Column(
@@ -74,6 +81,9 @@ class _CreateBodyState extends State<CreateBody> {
                   ),
                   //สร้าง textfield ,event name,Event Description,candidate
                   TextField(
+                    onChanged: (value) {
+                      EventName = value;
+                    },
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     style: TextStyle(fontSize: 16, color: Colors.black),
@@ -97,6 +107,9 @@ class _CreateBodyState extends State<CreateBody> {
                   ),
                   SizedBox(height: 20),
                   TextField(
+                    onChanged: (value) {
+                      EventDes = value;
+                    },
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     style: TextStyle(fontSize: 16, color: Colors.black),
@@ -126,16 +139,16 @@ class _CreateBodyState extends State<CreateBody> {
                     style: TextStyle(
                         color: Colors.blue, fontWeight: FontWeight.bold),
                   ),
-                  _addTextfields("candidate"),
-                  _addTextfields("candidate"),
+                  _addTextfields(0),
+                  _addTextfields(1),
                   Row(
                     children: [
                       Expanded(
                           child: ListView.builder(
                               shrinkWrap: true,
                               itemCount: _count,
-                              itemBuilder: (context, index) {
-                                return _addTextfields("candidate");
+                              itemBuilder: (context, Index) {
+                                return _addTextfields(Index);
                               }))
                     ],
                   ),
@@ -152,15 +165,20 @@ class _CreateBodyState extends State<CreateBody> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 490,
+              width: MediaQuery.of(context).size.width < 600
+                  ? MediaQuery.of(context).size.width
+                  : 600,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MediaQuery.of(context).size.width > 300
+                    ? MainAxisAlignment.end
+                    : MainAxisAlignment.center,
                 children: [
                   RButton(
                     str: "Add",
                     press: () {
                       setState(() {
                         _count++;
+                        addtextIndex++;
                       });
                     },
                     bColor: Colors.blue,
@@ -176,6 +194,7 @@ class _CreateBodyState extends State<CreateBody> {
                         () {
                           if (_count > 0) {
                             _count--;
+                            addtextIndex--;
                           }
                         },
                       );
@@ -333,7 +352,7 @@ class _CreateBodyState extends State<CreateBody> {
             children: <Widget>[
               MultiSelectDialogField(
                 dialogWidth: MediaQuery.of(context).size.width * 0.25,
-                dialogHeight: MediaQuery.of(context).size.height * 0.25,
+                dialogHeight: MediaQuery.of(context).size.height * 0.50,
                 items: _items,
                 title: Text("Faculty"),
                 selectedColor: Colors.blue,
@@ -363,14 +382,6 @@ class _CreateBodyState extends State<CreateBody> {
                     tempSelectedFaculty.add(element.value);
                   });
                   _selectedFaculty = tempSelectedFaculty;
-                  MultiSelectChipDisplay(
-                    onTap: (value) {
-                      setState(() {
-                        tempSelectedFaculty.remove(value);
-                        _selectedFaculty.remove(value);
-                      });
-                    },
-                  );
                 },
                 chipDisplay: MultiSelectChipDisplay(
                   textStyle: TextStyle(fontSize: 12),
@@ -404,7 +415,15 @@ class _CreateBodyState extends State<CreateBody> {
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 25, vertical: 15),
                                 color: Colors.blue,
-                                onPressed: () {},
+                                onPressed: () async {
+                                  data.doc(EventName).set({
+                                    'Event Name': EventName,
+                                    'Description': EventDes,
+                                    'Candidate': Candidate_name.getRange(
+                                        0, Candidate_name.length)
+                                  });
+                                  Navigator.pushNamed(context, '/vote/create');
+                                },
                                 child: Text(
                                   "Create Event",
                                   style: TextStyle(
@@ -484,13 +503,16 @@ class _CreateBodyState extends State<CreateBody> {
   }
 
 //widget สร้าง textfield candidate
-  _addTextfields(String str) {
+  _addTextfields(int index) {
     return Column(
       children: [
         SizedBox(
           height: 10,
         ),
         TextField(
+          onChanged: (value) {
+            Candidate_name.insert(index, value);
+          },
           keyboardType: TextInputType.multiline,
           maxLines: null,
           style: TextStyle(fontSize: 16, color: Colors.black),

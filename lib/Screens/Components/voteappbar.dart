@@ -1,10 +1,12 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:web_prototype/Screens/Components/%E0%B8%BAButton.dart';
 
 import '../Home/home_screen.dart';
-import 'login_state.dart';
 
 class MyWidget extends StatefulWidget {
   const MyWidget({Key? key}) : super(key: key);
@@ -43,12 +45,21 @@ class _MyWidgetState extends State<MyWidget> {
           Spacer(),
           RButton(
               str: "logout".toUpperCase(),
-              press: () {
-                GlobalValues.setLoginStatus(false);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
+              press: () async {
+                SnackBar snackBar = SnackBar(
+                  content: Text(
+                    "Loging out...",
+                    style: TextStyle(fontSize: 36, color: Colors.black),
+                  ),
+                  backgroundColor: Colors.pinkAccent,
+                  duration: Duration(milliseconds: 1300),
                 );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                FirebaseAuth.instance.signOut().then((value) {
+                  Timer(const Duration(milliseconds: 1400), () {
+                    Navigator.pushNamed(context, HomeScreen.route);
+                  });
+                });
               },
               bColor: Colors.white,
               tColor: Colors.blue),

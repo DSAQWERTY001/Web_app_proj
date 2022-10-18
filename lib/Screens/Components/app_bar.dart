@@ -1,17 +1,24 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:web_prototype/Screens/Components/%E0%B8%BAButton.dart';
-import 'package:web_prototype/Screens/Components/login_state.dart';
 import 'package:web_prototype/Screens/Components/menu_item.dart';
 import 'package:web_prototype/Screens/Create_Vote/create_vote.dart';
 import 'package:web_prototype/Screens/Home/home_screen.dart';
 
 import '../Login/login_screen.dart';
 
-class VoteAppBar extends StatelessWidget {
+class VoteAppBar extends StatefulWidget {
   const VoteAppBar({Key? key}) : super(key: key);
 
+  @override
+  State<VoteAppBar> createState() => _VoteAppBarState();
+}
+
+class _VoteAppBarState extends State<VoteAppBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,35 +46,38 @@ class VoteAppBar extends StatelessWidget {
             ),
           ),
           Spacer(),
-          if (GlobalValues.getLoginStatus())
+          if (FirebaseAuth.instance.currentUser != null)
             (menuItem(
               title: "Creation Vote",
               press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => createVoteScreen()),
-                );
+                Navigator.pushNamed(context, '/vote/create');
               },
             )),
           menuItem(
             title: "home".toUpperCase(),
             press: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HomeScreen()),
-              );
+              Navigator.of(context).pushNamed(HomeScreen.route);
             },
           ),
           menuItem(title: "about us".toUpperCase(), press: () {}),
-          if (GlobalValues.getLoginStatus())
+          if (FirebaseAuth.instance.currentUser != null)
             (RButton(
                 str: "logout".toUpperCase(),
-                press: () {
-                  GlobalValues.setLoginStatus(false);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                press: () async {
+                  SnackBar snackBar = SnackBar(
+                    content: Text(
+                      "Loging out...",
+                      style: TextStyle(fontSize: 36, color: Colors.black),
+                    ),
+                    backgroundColor: Colors.pinkAccent,
+                    duration: Duration(milliseconds: 1300),
                   );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  FirebaseAuth.instance.signOut().then((value) {
+                    Timer(const Duration(milliseconds: 1400), () {
+                      Navigator.pushNamed(context, HomeScreen.route);
+                    });
+                  });
                 },
                 bColor: Colors.white,
                 tColor: Colors.blue))
@@ -75,10 +85,7 @@ class VoteAppBar extends StatelessWidget {
             (RButton(
                 str: "login".toUpperCase(),
                 press: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                  );
+                  Navigator.of(context).pushNamed(LoginScreen.route);
                 },
                 bColor: Colors.white,
                 tColor: Colors.blue)),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:web_prototype/Screens/Components/app_bar.dart';
 import 'package:web_prototype/Screens/Components/body.dart';
+import 'package:http/http.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
+  static const String route = '/';
 
   @override
   Widget build(BuildContext context) {

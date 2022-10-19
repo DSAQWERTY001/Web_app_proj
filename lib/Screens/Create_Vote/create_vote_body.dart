@@ -17,6 +17,7 @@ class CreateBody extends StatefulWidget {
 class _CreateBodyState extends State<CreateBody> {
   CollectionReference data = FirebaseFirestore.instance.collection("Event");
   List<String> Candidate_name = [];
+  late List<Map<String, dynamic>> _values;
   DateTime SdateTime = DateTime.now();
   DateTime EdateTime = DateTime.now();
   late int _count;
@@ -44,7 +45,7 @@ class _CreateBodyState extends State<CreateBody> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _count = 0;
+    _count = 2;
   }
 
   @override
@@ -58,8 +59,7 @@ class _CreateBodyState extends State<CreateBody> {
     final deferTimeMinute = defTimeMinutes(SdateTime, EdateTime);
     String EventName = "";
     String EventDes = "";
-    String can1 = "";
-    String can2 = "";
+    int i = 2;
     return Column(
       children: [
         Column(
@@ -139,16 +139,14 @@ class _CreateBodyState extends State<CreateBody> {
                     style: TextStyle(
                         color: Colors.blue, fontWeight: FontWeight.bold),
                   ),
-                  _addTextfields(0),
-                  _addTextfields(1),
                   Row(
                     children: [
                       Expanded(
                           child: ListView.builder(
                               shrinkWrap: true,
-                              itemCount: _count,
-                              itemBuilder: (context, Index) {
-                                return _addTextfields(Index);
+                              itemCount: 2 > _count ? 2 : _count,
+                              itemBuilder: (context, int index) {
+                                return _addTextfields(index);
                               }))
                     ],
                   ),
@@ -178,7 +176,6 @@ class _CreateBodyState extends State<CreateBody> {
                     press: () {
                       setState(() {
                         _count++;
-                        addtextIndex++;
                       });
                     },
                     bColor: Colors.blue,
@@ -192,9 +189,8 @@ class _CreateBodyState extends State<CreateBody> {
                     press: () {
                       setState(
                         () {
-                          if (_count > 0) {
+                          if (_count > 2) {
                             _count--;
-                            addtextIndex--;
                           }
                         },
                       );
@@ -419,8 +415,10 @@ class _CreateBodyState extends State<CreateBody> {
                                   data.doc(EventName).set({
                                     'Event Name': EventName,
                                     'Description': EventDes,
-                                    'Candidate': Candidate_name.getRange(
-                                        0, Candidate_name.length)
+                                    'Candidate':
+                                        Candidate_name.getRange(0, _count),
+                                    'Start Date': SdateTime,
+                                    'End Date': EdateTime,
                                   });
                                   Navigator.pushNamed(context, '/vote/create');
                                 },

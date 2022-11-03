@@ -3,12 +3,14 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:near_api_flutter/near_api_flutter.dart';
 import 'package:web_prototype/Screens/Home/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../Create_Vote/create_vote_body.dart';
 
 class LoginScreen extends StatefulWidget {
-  static const String route = '/login';
+  static String route = '/login';
   LoginScreen({Key? key}) : super(key: key);
 
   @override
@@ -18,6 +20,26 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String user = "";
   String pass = "";
+  static bool iconpass = false;
+  // Map response = {};
+  // String contractId = 'friendbook.nearflutter.testnet';
+  // String mutateMethod = 'submitMessage';
+  // String viewMethod = 'getAllMessages';
+  // late Account connectedAccount;
+  // String userAccount = 'neararabic.testnet';
+  // final _textUserIdController = TextEditingController();
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _textUserIdController.text = "nearflutter.testnet";
+  // }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,15 +154,16 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future signIn() async {
-    SnackBar snackBar = SnackBar(
-      content: Text(
-        "Login...",
-        style: TextStyle(fontSize: 36, color: Colors.black),
-      ),
-      backgroundColor: Colors.pinkAccent,
-      duration: Duration(milliseconds: 1800),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    // SnackBar snackBar = SnackBar(
+    //   content: Text(
+    //     "Login...",
+    //     style: TextStyle(fontSize: 36, color: Colors.black),
+    //   ),
+    //   backgroundColor: Colors.pinkAccent,
+    //   duration: Duration(milliseconds: 1800),
+    // );
+    // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    Dialogs();
     User? currentUser;
     await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: user, password: pass)
@@ -181,5 +204,35 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       });
     }
+  }
+}
+
+class Dialogs {
+  static Future<void> showLoadingDialog(
+      BuildContext context, GlobalKey key) async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return new WillPopScope(
+              onWillPop: () async => false,
+              child: SimpleDialog(
+                  key: key,
+                  backgroundColor: Colors.black54,
+                  children: <Widget>[
+                    Center(
+                      child: Column(children: [
+                        CircularProgressIndicator(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "Please Wait....",
+                          style: TextStyle(color: Colors.blueAccent),
+                        )
+                      ]),
+                    )
+                  ]));
+        });
   }
 }

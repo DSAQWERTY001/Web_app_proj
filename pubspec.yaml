@@ -42,6 +42,11 @@ dependencies:
   get_it: ^1.0.3
   firebase_storage: ^10.3.11
   firebase_database: ^9.1.7
+  near_api_flutter: ^0.0.12-alpha
+  data_table_2: ^2.3.7
+  parent_child_checkbox: ^0.0.3
+  awesome_select: ^6.0.0
+  firebase_core_platform_interface: 4.5.1
 
 dev_dependencies:
   flutter_test:
@@ -82,16 +87,16 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+  #    - family: Schyler
+  #      fonts:
+  #        - asset: fonts/Schyler-Regular.ttf
+  #        - asset: fonts/Schyler-Italic.ttf
+    #        style: italic
+    #  - family: Trajan Pro
+    #    fonts:
+    #      - asset: fonts/TrajanPro.ttf
+    #      - asset: fonts/TrajanPro_Bold.ttf
+    #        weight: 700
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

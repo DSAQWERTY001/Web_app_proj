@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:web_prototype/Screens/Components/%E0%B8%BAButton.dart';
 
@@ -15,6 +16,8 @@ class CheckBoxMultiChilde extends StatefulWidget {
 }
 
 class _CheckBoxMultiChildeState extends State<CheckBoxMultiChilde> {
+  final Stream<QuerySnapshot> _usersStream =
+      FirebaseFirestore.instance.collection('Facuty').snapshots();
   final List<String> _selectedItems = [];
   @override
   void initState() {

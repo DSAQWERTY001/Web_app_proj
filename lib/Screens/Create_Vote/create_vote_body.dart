@@ -26,15 +26,18 @@ class CreateBody extends StatefulWidget {
 
 class _CreateBodyState extends State<CreateBody> {
   final user = FirebaseAuth.instance.currentUser?.email;
+  CollectionReference _datapart =
+      FirebaseFirestore.instance.collection('Facuty');
   List<String> Candidate_name = [];
   List<String> _selectedItems = [];
   late List<Map<String, dynamic>> _values;
   DateTime SdateTime = DateTime.now();
   DateTime EdateTime = DateTime.now();
   late int _count;
-  int? selectId;
+  int selectId = 0;
   int addtextIndex = 1;
   String? selectedValue;
+  String nameID = "Facuty";
   // static List<Faculty> _faculty = [
   //   Faculty(
   //     id: 1,
@@ -65,28 +68,30 @@ class _CreateBodyState extends State<CreateBody> {
       'isCheck': false,
     },
   ];
-  List<Map> fac = [
-    {"name": "คณะครุศาสตร์อุตสาหกรรม", "isChecked": false},
-    {"name": "คณะวิศวกรรมศาสต", "isChecked": false},
-    {
-      "name": "วิทยาลัยเทคโนโลยีอุตสาหกรรม",
-      "isChecked": false,
-    },
-    {"name": "คณะเทคโนโลยีสารสนเทศและนวัตกรรมดิจิทัล", "isChecked": false},
-    {"name": "คณะศิลปศาสตร์ประยุกต์", "isChecked": false},
-    {"name": "The Sirindhorn TGGS", "isChecked": false},
-    {"name": "คณะสถาปัตยกรรมและการออกแบบ", "isChecked": false},
-    {"name": "วิทยาลัยนานาชาติ", "isChecked": false},
-    {"name": "คณะพัฒนาธุรกิจและอุตสาหกรรม", "isChecked": false},
-    {"name": "บัณฑิตวิทยาลัย", "isChecked": false}
-  ];
+  // List<Map> fac = [
+  //   {"name": "คณะครุศาสตร์อุตสาหกรรม", "isChecked": false},
+  //   {"name": "คณะวิศวกรรมศาสต", "isChecked": false},
+  //   {
+  //     "name": "วิทยาลัยเทคโนโลยีอุตสาหกรรม",
+  //     "isChecked": false,
+  //   },
+  //   {"name": "คณะเทคโนโลยีสารสนเทศและนวัตกรรมดิจิทัล", "isChecked": false},
+  //   {"name": "คณะศิลปศาสตร์ประยุกต์", "isChecked": false},
+  //   {"name": "The Sirindhorn TGGS", "isChecked": false},
+  //   {"name": "คณะสถาปัตยกรรมและการออกแบบ", "isChecked": false},
+  //   {"name": "วิทยาลัยนานาชาติ", "isChecked": false},
+  //   {"name": "คณะพัฒนาธุรกิจและอุตสาหกรรม", "isChecked": false},
+  //   {"name": "บัณฑิตวิทยาลัย", "isChecked": false}
+  // ];
   // final _items = _faculty
   //     .map((faculty) => MultiSelectItem<Faculty>(faculty, faculty.name))
   //     .toList();
   List<Faculty> _selectedFaculty = [];
+  List<String> DataPart = [];
   final _multiSelectKey = GlobalKey<FormFieldState>();
   String EventName = "";
   String EventDes = "";
+  String IdStudent = "";
   Map response = {};
   String contractId = 'friendbook.nearflutter.testnet';
   String mutateMethod = 'submitMessage';
@@ -112,6 +117,7 @@ class _CreateBodyState extends State<CreateBody> {
     final deferDay = defDay(SdateTime, EdateTime);
     final deferTime = defTime(SdateTime, EdateTime);
     final deferTimeMinute = defTimeMinutes(SdateTime, EdateTime);
+
     return Column(
       children: [
         Column(
@@ -401,31 +407,6 @@ class _CreateBodyState extends State<CreateBody> {
         SizedBox(
           height: 20,
         ),
-        // Row(
-        //   children: [
-        //     RButton(
-        //         str: "Enter",
-        //         press: () async {
-        //           String walletURL = 'https://wallet.testnet.near.org/login/?';
-        //           String contractId = 'testb.qwerty_vote.testnet';
-        //           String appTitle = 'Friendbook';
-        //           String accountId = userAccount;
-        //           String nearSignInSuccessUrl =
-        //               'https://near-transaction-serializer.herokuapp.com/success';
-        //           String nearSignInFailUrl =
-        //               'https://near-transaction-serializer.herokuapp.com/failure';
-        //           connectedAccount = NEARTester.loginWithFullAccess(
-        //               walletURL,
-        //               contractId,
-        //               accountId,
-        //               appTitle,
-        //               nearSignInSuccessUrl,
-        //               nearSignInFailUrl);
-        //         },
-        //         bColor: Colors.blue,
-        //         tColor: Colors.white)
-        //   ],
-        // ),
         // SizedBox(
         //   height: 20,
         // ),
@@ -456,16 +437,24 @@ class _CreateBodyState extends State<CreateBody> {
         // CheckSinglechoice(),
         Container(
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(3, (index) {
               return Checkbox(
                 value: selectId == index,
                 onChanged: (checked) {
                   if (checked == true) {
                     setState(() => selectId = index);
+                    if (selectId == 0) {
+                      nameID = "Facuty";
+                    } else if (selectId == 1) {
+                      nameID = "Part";
+                    }
+                    _selectedItems.clear();
                   }
                 },
+                materialTapTargetSize: MaterialTapTargetSize.padded,
               );
-            }),
+            }).toList(),
             // children: List.generate(valueSelect.length, (index) {
             //   try {
             //     return CheckboxListTile(
@@ -487,6 +476,7 @@ class _CreateBodyState extends State<CreateBody> {
             //   }
             // }),
           ),
+
           // children: [],
           // children: List.generate(3, (index) {
           //   return Checkbox(
@@ -499,21 +489,102 @@ class _CreateBodyState extends State<CreateBody> {
           //   );
           // }),
         ),
-        Container(
-            width: 500,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                RButton(
-                    str: "Select Faculty",
-                    press: _showMultiSelect,
-                    bColor: Colors.blue,
-                    tColor: Colors.white),
-              ],
-            )),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "Faculty",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              "Part",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              width: 19,
+            ),
+            Text(
+              "ID",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              width: 20,
+            ),
+          ],
+        ),
         SizedBox(
           height: 20,
         ),
+        if (selectId == 2)
+          (Container(
+            width: 600,
+            child: Column(
+              children: [
+                TextField(
+                  onChanged: (value) {
+                    IdStudent = value;
+                    setState(() {
+                      _selectedItems = IdStudent.split(",");
+                    });
+                  },
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                  decoration: const InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue, width: 2),
+                      borderRadius: BorderRadius.all(Radius.circular(22)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.amber, width: 2),
+                      borderRadius: BorderRadius.all(Radius.circular(22)),
+                    ),
+                    labelText: " ID Student",
+                    labelStyle:
+                        TextStyle(color: Color.fromARGB(255, 127, 197, 255)),
+                    icon: Icon(
+                      Icons.supervisor_account_outlined,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+                // SizedBox(
+                //   height: 20,
+                // ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     RButton(
+                //         str: "Convert String to array",
+                //         press: () {},
+                //         bColor: Colors.blue,
+                //         tColor: Colors.white)
+                //   ],
+                // ),
+              ],
+            ),
+          ))
+        else
+          (Container(
+              width: 500,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  RButton(
+                      str: "Select $nameID Voter",
+                      press: _showMultiSelect,
+                      bColor: Colors.blue,
+                      tColor: Colors.white),
+                ],
+              ))),
+
+        SizedBox(
+          height: 20,
+        ),
+
         Container(
             width: 600,
             margin: const EdgeInsets.fromLTRB(50, 0, 0, 0),
@@ -537,9 +608,53 @@ class _CreateBodyState extends State<CreateBody> {
         Row(
           children: [
             RButton(
+                str: "Enter",
+                press: () async {
+                  String walletURL = 'https://wallet.testnet.near.org/login/?';
+                  String contractId = 'testb.qwerty_vote.testnet';
+                  String appTitle = 'Friendbook';
+                  String accountId = userAccount;
+                  String nearSignInSuccessUrl =
+                      'https://near-transaction-serializer.herokuapp.com/success';
+                  String nearSignInFailUrl =
+                      'https://near-transaction-serializer.herokuapp.com/failure';
+                  connectedAccount = NEARTester.loginWithFullAccess(
+                      walletURL,
+                      contractId,
+                      accountId,
+                      appTitle,
+                      nearSignInSuccessUrl,
+                      nearSignInFailUrl);
+                },
+                bColor: Colors.blue,
+                tColor: Colors.white)
+          ],
+        ),
+        ElevatedButton(
+          //call method
+          onPressed: () async {
+            String method = 'submitMessage';
+            String methodArgs =
+                '{"content":"message text","receiver":"htahir.testnet"}';
+            String contractId = 'friendbook.nearflutter.testnet';
+            Contract contract = Contract(contractId, connectedAccount);
+
+            response = await NEARTester.callMethodFullAccess(
+                contract, method, methodArgs);
+            setState(() {});
+          },
+          child: const Text("Call without deposit"),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Row(
+          children: [
+            RButton(
                 str: "enter",
                 press: () {
                   print(_selectedItems);
+                  print(response);
                 },
                 bColor: Colors.blue,
                 tColor: Colors.white)
@@ -578,6 +693,7 @@ class _CreateBodyState extends State<CreateBody> {
                                     'Start Date': SdateTime,
                                     'End Date': EdateTime,
                                     'Creator': user,
+                                    'Voter': _selectedItems,
                                   });
                                   Navigator.pushNamed(context, '/vote/create');
                                 },
@@ -659,24 +775,114 @@ class _CreateBodyState extends State<CreateBody> {
     return (end.difference(start).inHours).round();
   }
 
+  void _trimStringid(String data) {
+    int i = 0;
+    while (data.isEmpty) {
+      _selectedItems[i] = data.trim();
+      i++;
+    }
+  }
+
   void _showMultiSelect() async {
-    final List<String> facul = [
-      "คณะครุศาสตร์อุตสาหกรรม",
-      "คณะวิศวกรรมศาสตร์",
-      "วิทยาลัยเทคโนโลยีอุตสาหกรรม",
-      "คณะเทคโนโลยีสารสนเทศและนวัตกรรมดิจิทัล",
-      "คณะศิลปศาสตร์ประยุกต์",
-      "The Sirindhorn TGGS",
-      "คณะสถาปัตยกรรมและการออกแบบ",
-      "วิทยาลัยนานาชาติ",
-      "คณะพัฒนาธุรกิจและอุตสาหกรรม",
-      "บัณฑิตวิทยาลัย",
-    ];
+    // await FirebaseFirestore.instance
+    //     .collection('Facuty')
+    //     .get()
+    //     .then((QuerySnapshot value) {
+    //   value.docs.forEach((element) {
+    //     var respon = element['สาขา'];
+    //   });
+    // });
+    List<String> facul = [];
+    String _title;
+    if (selectId == 0) {
+      facul = [
+        "คณะครุศาสตร์อุตสาหกรรม",
+        "คณะวิศวกรรมศาสตร์",
+        "วิทยาลัยเทคโนโลยีอุตสาหกรรม",
+        "คณะเทคโนโลยีสารสนเทศและนวัตกรรมดิจิทัล",
+        "คณะศิลปศาสตร์ประยุกต์",
+        "The Sirindhorn TGGS",
+        "คณะสถาปัตยกรรมและการออกแบบ",
+        "วิทยาลัยนานาชาติ",
+        "คณะพัฒนาธุรกิจและอุตสาหกรรม",
+        "บัณฑิตวิทยาลัย",
+      ];
+      _title = "Faculty";
+    } else if (selectId == 1) {
+      facul = [
+        "TM,TTM",
+        "TE,TTE",
+        "TP",
+        "TT",
+        "CEE",
+        "CED",
+        "BBR",
+        "BMS",
+        "AS",
+        "AT",
+        "CS",
+        "IC",
+        "IMI",
+        "MA",
+        "ASB",
+        "BT",
+        "FT",
+        "ET",
+        "MC",
+        "EPH",
+        "BME",
+        "ME",
+        "EE",
+        "Ch.E",
+        "CE",
+        "IE",
+        "MHE",
+        "MATE",
+        "InSE",
+        "AE",
+        "CprE",
+        "LE",
+        "IEE",
+        "E-EE",
+        "I-Ch.E",
+        "I-IME",
+        "Int.D",
+        "Cer.D",
+        "AAP.D",
+        "DM.B",
+        "Arch",
+        "ITBL",
+        "TDET",
+        "WdET",
+        "PnET",
+        "InET",
+        "MDET",
+        "AmET",
+        "RAET",
+        "EnET",
+        "PoET",
+        "MtET",
+        "ACET",
+        "IPTM",
+        "MDT",
+        "TDT",
+        "EIT",
+        "ETT",
+        "WDT",
+        "PNT",
+        "AMT",
+        "IPT",
+        "MtT",
+      ];
+      _title = "Part Of Faculty";
+    } else {
+      _title = "ID Student";
+    }
 
     final List<String>? results = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return CheckBoxMultiChilde(data: facul, title: "Faculty");
+        return CheckBoxMultiChilde(data: facul, title: _title);
       },
     );
 
@@ -782,68 +988,68 @@ class NEARTester {
   }
 }
 
-class CheckSinglechoice extends StatefulWidget {
-  CheckSinglechoice({Key? key}) : super(key: key);
+// class CheckSinglechoice extends StatefulWidget {
+//   CheckSinglechoice({Key? key}) : super(key: key);
 
-  @override
-  State<CheckSinglechoice> createState() => _CheckSinglechoiceState();
-}
+//   @override
+//   State<CheckSinglechoice> createState() => _CheckSinglechoiceState();
+// }
 
-class _CheckSinglechoiceState extends State<CheckSinglechoice> {
-  String selected = "";
+// class _CheckSinglechoiceState extends State<CheckSinglechoice> {
+//   String selected = "";
 
-  List checkListItems = [
-    {
-      "id": 0,
-      "value": false,
-      "title": "Faculty",
-    },
-    {
-      "id": 1,
-      "value": false,
-      "title": "Part of Faculty",
-    },
-    {
-      "id": 2,
-      "value": false,
-      "title": "Id Student",
-    },
-  ];
+//   List checkListItems = [
+//     {
+//       "id": 0,
+//       "value": false,
+//       "title": "Faculty",
+//     },
+//     {
+//       "id": 1,
+//       "value": false,
+//       "title": "Part of Faculty",
+//     },
+//     {
+//       "id": 2,
+//       "value": false,
+//       "title": "Id Student",
+//     },
+//   ];
 
-  @override
-  void initState() {
-    super.initState();
-  }
+//   @override
+//   void initState() {
+//     super.initState();
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: List.generate(
-        checkListItems.length,
-        (index) => CheckboxListTile(
-          controlAffinity: ListTileControlAffinity.leading,
-          contentPadding: EdgeInsets.zero,
-          dense: true,
-          title: Text(
-            checkListItems[index]["title"],
-            style: const TextStyle(
-              fontSize: 16.0,
-              color: Colors.black,
-            ),
-          ),
-          value: checkListItems[index]["value"],
-          onChanged: (value) {
-            setState(() {
-              for (var element in checkListItems) {
-                element["value"] = false;
-              }
-              checkListItems[index]["value"] = value;
-              selected =
-                  "${checkListItems[index]["id"]}, ${checkListItems[index]["title"]}, ${checkListItems[index]["value"]}";
-            });
-          },
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       children: List.generate(
+//         checkListItems.length,
+//         (index) => CheckboxListTile(
+//           controlAffinity: ListTileControlAffinity.leading,
+//           contentPadding: EdgeInsets.zero,
+//           dense: true,
+//           title: Text(
+//             checkListItems[index]["title"],
+//             style: const TextStyle(
+//               fontSize: 16.0,
+//               color: Colors.black,
+//             ),
+//           ),
+//           value: checkListItems[index]["value"],
+//           onChanged: (value) {
+//             setState(() {
+//               for (var element in checkListItems) {
+//                 element["value"] = false;
+//               }
+//               checkListItems[index]["value"] = value;
+//               selected =
+//                   "${checkListItems[index]["id"]}, ${checkListItems[index]["title"]}, ${checkListItems[index]["value"]}";
+//             });
+//           },
+//         ),
+//       ),
+//     );
+//   }
+// }

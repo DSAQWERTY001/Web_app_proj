@@ -34,19 +34,27 @@ class _DashboardPageState extends State<DashboardPage> {
                         snapshot.data!.docs.map((DocumentSnapshot document) {
                       Map<String, dynamic> data =
                           document.data()! as Map<String, dynamic>;
-
+                      Timestamp ts = data['Start Date'] as Timestamp;
+                      Timestamp te = data['End Date'] as Timestamp;
+                      DateTime sdate = ts.toDate();
+                      DateTime edate = te.toDate();
                       return Container(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            SizedBox(
+                              height: 20,
+                            ),
                             Text(
                               data['Event Name'],
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15),
                             ),
-                            ListTile(
-                              title: Text(data['Creator']),
-                            ),
+                            Text(data['Description']),
+                            Text(
+                                '${sdate.day} : ${sdate.month} : ${sdate.year}    ${sdate.hour} : ${sdate.minute}'),
+                            Text(
+                                '${edate.day} : ${edate.month} : ${edate.year}    ${edate.hour} : ${edate.minute}'),
                           ],
                         ),
                       );

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class CardComp extends StatefulWidget {
@@ -110,17 +112,20 @@ class CardExpo extends StatelessWidget {
   final bool check;
   final DateTime StaDate;
   final DateTime EndDate;
-  const CardExpo(
-      {Key? key,
-      required this.TextTitle,
-      required this.Descrip,
-      required this.check,
-      required this.StaDate,
-      required this.EndDate})
-      : super(key: key);
+  final List<dynamic> Candi;
+  const CardExpo({
+    Key? key,
+    required this.TextTitle,
+    required this.Descrip,
+    required this.check,
+    required this.StaDate,
+    required this.EndDate,
+    required this.Candi,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // List<dynamic> alldata = [];
     return ListView.builder(
       scrollDirection: Axis.vertical,
       padding: MediaQuery.of(context).size.width < 1200
@@ -146,6 +151,7 @@ class CardExpo extends StatelessWidget {
                 // enabled: true,
                 enabled: check,
                 onTap: () async {
+                  print(Candi);
                   showLoadingDialog(context);
                 },
                 contentPadding:
@@ -206,6 +212,7 @@ class CardExpo extends StatelessWidget {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            // Text("${alldata.length}"),
             Text(Descrip + "\n"),
             Text(StaDate.toString() + "\n"),
             Text(EndDate.toString() + "\n"),
@@ -219,5 +226,22 @@ class CardExpo extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<QuerySnapshot?> getData() async {
+    List<dynamic> alldata = [];
+    final user = FirebaseAuth.instance.currentUser?.email;
+    final dataofItem = FirebaseFirestore.instance
+        .collection(user!)
+        .where(TextTitle)
+        .get()
+        .then((QuerySnapshot? querySnapshot) {
+      querySnapshot!.docs.forEach((doc) {
+        alldata = doc["Candidate"];
+        print("allData = $alldata");
+        // print("getData = ${doc["item_text_"]}");
+      });
+    });
+    return dataofItem;
   }
 }

@@ -20,6 +20,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+  List<dynamic> alldata = [];
   final user = FirebaseAuth.instance.currentUser?.email;
   @override
   Widget build(BuildContext context) {
@@ -36,21 +37,49 @@ class _DashboardPageState extends State<DashboardPage> {
                 : ListView(
                     children:
                         snapshot.data!.docs.map((DocumentSnapshot document) {
-                      Map<String, dynamic> data =
+                      // FirebaseFirestore.instance
+                      //     .collection(user!)
+                      //     .get()
+                      //     .then((QuerySnapshot? querySnapshot) {
+                      //   querySnapshot!.docs.forEach((doc) {
+                      //     if (alldata.length < 1) {
+                      //       alldata = doc["Candidate"];
+                      //     }
+                      //     print("allData = $alldata");
+                      //     //  print("getData = ${doc["item_text_"]}");
+                      //   });
+                      // });
+
+                      Map<String, dynamic> dataM =
                           document.data()! as Map<String, dynamic>;
-                      Timestamp ts = data['Start Date'] as Timestamp;
-                      Timestamp te = data['End Date'] as Timestamp;
+                      // List<dynamic> dataArray =
+                      //     List.from(snapshot.data['score']);
+                      Timestamp ts = dataM['Start Date'] as Timestamp;
+                      Timestamp te = dataM['End Date'] as Timestamp;
                       bool check;
                       DateTime sdate = ts.toDate();
                       DateTime edate = te.toDate();
+                      FirebaseFirestore.instance.collection(user!).get();
+                      print(dataM['Candidate']);
+                      print(dataM['Event Name']);
+                      print(dataM['Description']);
+                      print(sdate);
+                      // print(d);
+                      // var Data = dataM;
+                      // print(Data);
+                      // int score = data['score'];
+                      // List<int> score = data['score'];
+                      // List score = dataM['Voter'];
+                      // getData();
                       check = DateTime.now().isAfter(edate) ? true : false;
                       return Container(
                         child: CardExpo(
-                          TextTitle: data['Event Name'],
-                          Descrip: data['Description'],
+                          TextTitle: dataM['Event Name'],
+                          Descrip: dataM['Description'],
                           check: check,
                           StaDate: sdate,
                           EndDate: edate,
+                          Candi: dataM['Candidate'],
                         ),
                         // child: Column(
                         //   mainAxisAlignment: MainAxisAlignment.center,
@@ -80,7 +109,22 @@ class _DashboardPageState extends State<DashboardPage> {
     //   ),
     // );
   }
+
+  // Future<QuerySnapshot?> getData() async {
+  //   final dataofItem = FirebaseFirestore.instance
+  //       .collection(user!)
+  //       .get()
+  //       .then((QuerySnapshot? querySnapshot) {
+  //     querySnapshot!.docs.forEach((doc) {
+  //       alldata = doc["Candidate"];
+  //       print("allData = $alldata");
+  //       //  print("getData = ${doc["item_text_"]}");
+  //     });
+  //   });
+  //   return dataofItem;
+  // }
 }
+
 // final user = FirebaseAuth.instance.currentUser?.email;
 
 // class FireStoreDataBase {

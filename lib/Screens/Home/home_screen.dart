@@ -8,25 +8,25 @@ import 'package:http/http.dart' as http;
 
 class DogService {
   static randomDog() {
-    http
-        .get(Uri.parse('https://jsonplaceholder.typicode.com/todos/1'))
-        .then((value) {
-      print("Response status: ${value.body}");
-    });
+    // http.get(Uri.parse(
+    //     'https://e-voting-api-kmutnb-ac-th.vercel.app/addToTopicArray/ONG'));
   }
 }
 
+// Future<http.Response> createAlbum() {
+//   return http.post(
+//     Uri.parse(
+//         'https://e-voting-api-kmutnb-ac-th.vercel.app/addToTopicArray/TestFromFlutter'),
+//   );
+// }
+
 Future<Album> fetchAlbum() async {
-  final response =
-      await http.get(Uri.parse('https://jsonplaceholder.typicode.com/todos/1'));
+  final response = await http
+      .get(Uri.parse('https://e-voting-api-kmutnb-ac-th.vercel.app/test'));
 
   if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
     return Album.fromJson(jsonDecode(response.body));
   } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
     throw Exception('Failed to load album');
   }
 }
@@ -61,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     DogService.randomDog();
     futureAlbum = fetchAlbum();
+    // createAlbum();
   }
 
   @override

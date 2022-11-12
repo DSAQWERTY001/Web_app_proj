@@ -86,6 +86,9 @@ class _createVoteScreenState extends State<createVoteScreen> {
                           ),
                         ],
                       ),
+                      SizedBox(
+                        height: 20,
+                      ),
                       Expanded(child: bodyFunction(context)),
                     ],
                   ),

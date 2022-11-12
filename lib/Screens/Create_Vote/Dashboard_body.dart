@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
+import 'package:web_prototype/Screens/Components/Cardcomp.dart';
 import '../Components/ฺButton.dart';
 import '../Home/home_screen.dart';
 
@@ -24,7 +25,10 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection(user!).snapshots(),
+          stream: FirebaseFirestore.instance
+              .collection(user!)
+              .orderBy('Start Date', descending: true)
+              .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             return !snapshot.hasData
@@ -36,32 +40,45 @@ class _DashboardPageState extends State<DashboardPage> {
                           document.data()! as Map<String, dynamic>;
                       Timestamp ts = data['Start Date'] as Timestamp;
                       Timestamp te = data['End Date'] as Timestamp;
+                      bool check;
                       DateTime sdate = ts.toDate();
                       DateTime edate = te.toDate();
+                      check = DateTime.now().isAfter(edate) ? true : false;
                       return Container(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              data['Event Name'],
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15),
-                            ),
-                            Text(data['Description']),
-                            Text(
-                                '${sdate.day} : ${sdate.month} : ${sdate.year}    ${sdate.hour} : ${sdate.minute}'),
-                            Text(
-                                '${edate.day} : ${edate.month} : ${edate.year}    ${edate.hour} : ${edate.minute}'),
-                          ],
+                        child: CardExpo(
+                          TextTitle: data['Event Name'],
+                          Descrip: data['Description'],
+                          check: check,
+                          StaDate: sdate,
+                          EndDate: edate,
                         ),
+                        // child: Column(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     SizedBox(
+                        //       height: 20,
+                        //     ),
+                        //     CardComp(),
+                        //     Text(
+                        //       data['Event Name'],
+                        //       style: TextStyle(
+                        //           fontWeight: FontWeight.bold, fontSize: 15),
+                        //     ),
+                        //     Text(data['Description']),
+                        //     Text('${sdate}'),
+                        //     Text('${edate}'),
+                        //   ],
+                        // ),
                       );
                     }).toList(),
                   );
           }),
     );
+    // return Scaffold(
+    //   body: Container(
+    //     child: CardComp(),
+    //   ),
+    // );
   }
 }
 // final user = FirebaseAuth.instance.currentUser?.email;

@@ -154,15 +154,16 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future signIn() async {
-    // SnackBar snackBar = SnackBar(
-    //   content: Text(
-    //     "Login...",
-    //     style: TextStyle(fontSize: 36, color: Colors.black),
-    //   ),
-    //   backgroundColor: Colors.pinkAccent,
-    //   duration: Duration(milliseconds: 1800),
-    // );
-    // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    SnackBar snackBar = SnackBar(
+      content: Text(
+        "Login...",
+        style: TextStyle(fontSize: 36, color: Colors.white),
+      ),
+      backgroundColor: Colors.blue,
+      behavior: SnackBarBehavior.floating,
+      duration: Duration(milliseconds: 1800),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
     Dialogs();
     User? currentUser;
     await FirebaseAuth.instance
@@ -173,9 +174,10 @@ class _LoginScreenState extends State<LoginScreen> {
       final snackBar = SnackBar(
         content: Text(
           "Error Occured : " + onError.toString(),
-          style: TextStyle(fontSize: 36, color: Colors.black),
+          style: TextStyle(fontSize: 36, color: Colors.white),
         ),
-        backgroundColor: Colors.pinkAccent,
+        backgroundColor: Colors.red,
+        behavior: SnackBarBehavior.floating,
         duration: Duration(seconds: 5),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);

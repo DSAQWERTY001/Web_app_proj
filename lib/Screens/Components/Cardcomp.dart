@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -113,6 +115,7 @@ class CardExpo extends StatelessWidget {
   final DateTime StaDate;
   final DateTime EndDate;
   final List<dynamic> Candi;
+  final List<dynamic> score;
   const CardExpo({
     Key? key,
     required this.TextTitle,
@@ -121,6 +124,7 @@ class CardExpo extends StatelessWidget {
     required this.StaDate,
     required this.EndDate,
     required this.Candi,
+    required this.score,
   }) : super(key: key);
 
   @override
@@ -151,7 +155,6 @@ class CardExpo extends StatelessWidget {
                 // enabled: true,
                 enabled: check,
                 onTap: () async {
-                  print(Candi);
                   showLoadingDialog(context);
                 },
                 contentPadding:
@@ -212,8 +215,35 @@ class CardExpo extends StatelessWidget {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Text("${alldata.length}"),
             Text(Descrip + "\n"),
+            Container(
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: Candi.map((e) => Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(e + "\n"),
+                          SizedBox(
+                            width: 40,
+                          )
+                        ],
+                      )).toList(),
+                ),
+                Column(
+                  children: score
+                      .map((e) => Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(e.toString() + "\n"),
+                            ],
+                          ))
+                      .toList(),
+                ),
+              ],
+            )),
+            // Text("${alldata.length}"),
             Text(StaDate.toString() + "\n"),
             Text(EndDate.toString() + "\n"),
           ],
@@ -228,20 +258,20 @@ class CardExpo extends StatelessWidget {
     );
   }
 
-  Future<QuerySnapshot?> getData() async {
-    List<dynamic> alldata = [];
-    final user = FirebaseAuth.instance.currentUser?.email;
-    final dataofItem = FirebaseFirestore.instance
-        .collection(user!)
-        .where(TextTitle)
-        .get()
-        .then((QuerySnapshot? querySnapshot) {
-      querySnapshot!.docs.forEach((doc) {
-        alldata = doc["Candidate"];
-        print("allData = $alldata");
-        // print("getData = ${doc["item_text_"]}");
-      });
-    });
-    return dataofItem;
-  }
+  // Future<QuerySnapshot?> getData() async {
+  //   List<dynamic> alldata = [];
+  //   final user = FirebaseAuth.instance.currentUser?.email;
+  //   final dataofItem = FirebaseFirestore.instance
+  //       .collection(user!)
+  //       .where(TextTitle)
+  //       .get()
+  //       .then((QuerySnapshot? querySnapshot) {
+  //     querySnapshot!.docs.forEach((doc) {
+  //       alldata = doc["Candidate"];
+  //       print("allData = $alldata");
+  //       // print("getData = ${doc["item_text_"]}");
+  //     });
+  //   });
+  //   return dataofItem;
+  // }
 }

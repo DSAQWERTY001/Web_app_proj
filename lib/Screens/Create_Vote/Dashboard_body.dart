@@ -60,10 +60,10 @@ class _DashboardPageState extends State<DashboardPage> {
                       DateTime sdate = ts.toDate();
                       DateTime edate = te.toDate();
                       FirebaseFirestore.instance.collection(user!).get();
-                      print(dataM['Candidate']);
-                      print(dataM['Event Name']);
-                      print(dataM['Description']);
-                      print(sdate);
+                      // print(dataM['Candidate']);
+                      // print(dataM['Event Name']);
+                      // print(dataM['Description']);
+                      // print(sdate);
                       // print(d);
                       // var Data = dataM;
                       // print(Data);
@@ -80,6 +80,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           StaDate: sdate,
                           EndDate: edate,
                           Candi: dataM['Candidate'],
+                          score: dataM['Score'],
                         ),
                         // child: Column(
                         //   mainAxisAlignment: MainAxisAlignment.center,

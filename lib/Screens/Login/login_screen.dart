@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 import 'dart:async';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:near_api_flutter/near_api_flutter.dart';
@@ -20,7 +21,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String user = "";
   String pass = "";
-  static bool iconpass = false;
+  bool? _passwordShow;
   // Map response = {};
   // String contractId = 'friendbook.nearflutter.testnet';
   // String mutateMethod = 'submitMessage';
@@ -39,6 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _passwordShow = true;
   }
 
   @override
@@ -90,7 +92,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     onChanged: (value) {
                       pass = value;
                     },
-                    obscureText: true,
+                    onSubmitted: (value) {
+                      signIn();
+                    },
+                    obscureText: _passwordShow ?? false,
                     style: TextStyle(fontSize: 16, color: Colors.blue),
                     decoration: const InputDecoration(
                       enabledBorder: OutlineInputBorder(
@@ -109,8 +114,26 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
+                  // const SizedBox(
+                  //   height: 20,
+                  // ),
+                  CheckboxListTile(
+                    contentPadding: EdgeInsets.fromLTRB(50, 10, 0, 10),
+                    activeColor: Colors.blue,
+                    value: _passwordShow,
+                    onChanged: (e) {
+                      setState(() {
+                        _passwordShow = e;
+                      });
+                    },
+                    title: Text(
+                      "Hide Password",
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue),
+                    ),
+                    controlAffinity: ListTileControlAffinity.leading,
                   ),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(25),
@@ -161,7 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       backgroundColor: Colors.blue,
       behavior: SnackBarBehavior.floating,
-      duration: Duration(milliseconds: 1800),
+      duration: Duration(milliseconds: 2500),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
     Dialogs();

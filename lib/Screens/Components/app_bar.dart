@@ -9,6 +9,7 @@ import 'package:web_prototype/Screens/Components/menu_item.dart';
 import 'package:web_prototype/Screens/Create_Vote/Dashboard_body.dart';
 import 'package:web_prototype/Screens/Create_Vote/create_vote.dart';
 import 'package:web_prototype/Screens/Home/home_screen.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 import '../Login/login_screen.dart';
 
@@ -75,9 +76,10 @@ class _VoteAppBarState extends State<VoteAppBar> {
                   SnackBar snackBar = SnackBar(
                     content: Text(
                       "Loging out...",
-                      style: TextStyle(fontSize: 36, color: Colors.black),
+                      style: TextStyle(fontSize: 36, color: Colors.white),
                     ),
-                    backgroundColor: Colors.pinkAccent,
+                    backgroundColor: Colors.red,
+                    behavior: SnackBarBehavior.floating,
                     duration: Duration(milliseconds: 1300),
                   );
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);

@@ -67,6 +67,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     onChanged: (value) {
                       user = value;
                     },
+                    onSubmitted: (value) {
+                      signIn();
+                    },
                     style: TextStyle(fontSize: 16, color: Colors.blue),
                     decoration: const InputDecoration(
                       enabledBorder: OutlineInputBorder(

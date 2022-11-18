@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class addTextField extends StatelessWidget {
-  final List<String> Candidate_name;
+  final List<String?> Candidate_name;
   final int index;
-  const addTextField(
-      {Key? key, required this.Candidate_name, required this.index})
-      : super(key: key);
+  const addTextField({
+    Key? key,
+    required this.Candidate_name,
+    required this.index,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

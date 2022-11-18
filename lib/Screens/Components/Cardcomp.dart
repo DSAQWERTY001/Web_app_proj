@@ -116,6 +116,8 @@ class CardExpo extends StatelessWidget {
   final DateTime EndDate;
   final List<dynamic> Candi;
   final List<dynamic> score;
+  final List<dynamic> winner;
+  final int allvoter;
   const CardExpo({
     Key? key,
     required this.TextTitle,
@@ -125,6 +127,8 @@ class CardExpo extends StatelessWidget {
     required this.EndDate,
     required this.Candi,
     required this.score,
+    required this.winner,
+    required this.allvoter,
   }) : super(key: key);
 
   @override
@@ -208,45 +212,133 @@ class CardExpo extends StatelessWidget {
   }
 
   Future<void> showLoadingDialog(BuildContext context) async {
+    String s = "";
+    String ts = "";
+    String tn = "";
+    const initialValue = 0.0;
+    final resultvoted = score.fold<double>(
+        initialValue, (previousValue, element) => previousValue + element);
+    if (winner.length > 1) {
+      s = ",";
+    }
+    if (StaDate.minute < 10) {
+      ts = "0";
+    }
+    if (EndDate.minute < 10) {
+      tn = "0";
+    }
     return showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
         title: Text(TextTitle),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(Descrip + "\n"),
-            Container(
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(Descrip + "\n"),
+
+              Container(
                 child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: Candi.map((e) => Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(e + "\n"),
-                          SizedBox(
-                            width: 40,
-                          )
-                        ],
-                      )).toList(),
+                  children: [
+                    Text("winner : "),
+                    Expanded(
+                      child: Row(
+                        children: winner
+                            .map((e) => Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      child: Text(e + s),
+                                    ),
+                                    SizedBox(
+                                      width: 40,
+                                    )
+                                  ],
+                                ))
+                            .toList(),
+                      ),
+                    ),
+                  ],
                 ),
-                Column(
-                  children: score
-                      .map((e) => Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(e.toString() + "\n"),
-                            ],
-                          ))
-                      .toList(),
-                ),
-              ],
-            )),
-            // Text("${alldata.length}"),
-            Text(StaDate.toString() + "\n"),
-            Text(EndDate.toString() + "\n"),
-          ],
+              ),
+
+              SizedBox(
+                height: 15,
+              ),
+              Row(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text("All Voter : " + allvoter.toString()),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text("All Voted : " + resultvoted.toInt().toString()),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                  child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: Candi.map((e) => Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: 200,
+                              child: Text(e + "\n"),
+                            ),
+                            SizedBox(
+                              width: 40,
+                            )
+                          ],
+                        )).toList(),
+                  ),
+                  Column(
+                    children: score
+                        .map((e) => Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(e.toString() + "\n"),
+                              ],
+                            ))
+                        .toList(),
+                  ),
+                ],
+              )),
+              // Text("${alldata.length}"),
+              Text("Start : " +
+                  StaDate.day.toString() +
+                  "-" +
+                  StaDate.month.toString() +
+                  "-" +
+                  StaDate.year.toString() +
+                  "   " +
+                  StaDate.hour.toString() +
+                  ":" +
+                  ts +
+                  StaDate.minute.toString() +
+                  "\n"),
+              Text("End : " +
+                  EndDate.day.toString() +
+                  "-" +
+                  EndDate.month.toString() +
+                  "-" +
+                  EndDate.year.toString() +
+                  "   " +
+                  EndDate.hour.toString() +
+                  ":" +
+                  tn +
+                  EndDate.minute.toString() +
+                  "\n"),
+            ],
+          ),
         ),
         actions: <Widget>[
           TextButton(

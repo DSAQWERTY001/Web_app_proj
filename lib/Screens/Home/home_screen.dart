@@ -21,8 +21,9 @@ class DogService {
 // }
 
 Future<Album> fetchAlbum() async {
+  String a = 'test';
   final response = await http
-      .get(Uri.parse('https://e-voting-api-kmutnb-ac-th.vercel.app/test'));
+      .get(Uri.parse('https://e-voting-api-kmutnb-ac-th.vercel.app/$a'));
 
   if (response.statusCode == 200) {
     return Album.fromJson(jsonDecode(response.body));

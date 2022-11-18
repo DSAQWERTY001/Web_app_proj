@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,6 +12,7 @@ import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:web_prototype/Screens/Components/Cardcomp.dart';
 import '../Components/ฺButton.dart';
 import '../Home/home_screen.dart';
+import 'package:http/http.dart' as Http;
 
 class DashboardPage extends StatefulWidget {
   DashboardPage({Key? key}) : super(key: key);
@@ -27,13 +29,16 @@ class _DashboardPageState extends State<DashboardPage> {
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
-              .collection(user!)
+              .collection("EventCreate")
               .orderBy('Start Date', descending: true)
               .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             return !snapshot.hasData
-                ? Center(child: CircularProgressIndicator())
+                ? Center(
+                    child: Center(
+                    child: Text("Not Found"),
+                  ))
                 : ListView(
                     children:
                         snapshot.data!.docs.map((DocumentSnapshot document) {
@@ -52,6 +57,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
                       Map<String, dynamic> dataM =
                           document.data()! as Map<String, dynamic>;
+                      List<dynamic> vot = dataM['Voter'];
                       // List<dynamic> dataArray =
                       //     List.from(snapshot.data['score']);
                       Timestamp ts = dataM['Start Date'] as Timestamp;
@@ -71,35 +77,60 @@ class _DashboardPageState extends State<DashboardPage> {
                       // List<int> score = data['score'];
                       // List score = dataM['Voter'];
                       // getData();
+                      if (DateTime.now().isAfter(edate)) {
+                        Future getscoreVote() async {
+                          final responseScore = await Http.get(Uri.parse(
+                              'https://e-voting-api-kmutnb-ac-th.vercel.app/getEventScore/${dataM['Event Name']}'));
+                          final responseWinner = await Http.get(Uri.parse(
+                              'https://e-voting-api-kmutnb-ac-th.vercel.app/winner/${dataM['Event Name']}'));
+                          var data_score = jsonDecode(responseScore.body);
+                          var data_winner = jsonDecode(responseWinner.body);
+                          FirebaseFirestore.instance
+                              .collection("EventCreate")
+                              .doc(document.id)
+                              .update({
+                            'Score': data_score["score"],
+                            'winner': data_winner["winner"]
+                          });
+                        }
+
+                        getscoreVote();
+                      }
+
                       check = DateTime.now().isAfter(edate) ? true : false;
-                      return Container(
-                        child: CardExpo(
-                          TextTitle: dataM['Event Name'],
-                          Descrip: dataM['Description'],
-                          check: check,
-                          StaDate: sdate,
-                          EndDate: edate,
-                          Candi: dataM['Candidate'],
-                          score: dataM['Score'],
-                        ),
-                        // child: Column(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   children: [
-                        //     SizedBox(
-                        //       height: 20,
-                        //     ),
-                        //     CardComp(),
-                        //     Text(
-                        //       data['Event Name'],
-                        //       style: TextStyle(
-                        //           fontWeight: FontWeight.bold, fontSize: 15),
-                        //     ),
-                        //     Text(data['Description']),
-                        //     Text('${sdate}'),
-                        //     Text('${edate}'),
-                        //   ],
-                        // ),
-                      );
+                      if (dataM['Creator'] == user) {
+                        return Container(
+                          child: CardExpo(
+                            TextTitle: dataM['Event Name'],
+                            Descrip: dataM['Description'],
+                            check: check,
+                            StaDate: sdate,
+                            EndDate: edate,
+                            Candi: dataM['Candidate'],
+                            score: dataM['Score'],
+                            winner: dataM['winner'],
+                            allvoter: vot.length,
+                          ),
+                          // child: Column(
+                          //   mainAxisAlignment: MainAxisAlignment.center,
+                          //   children: [
+                          //     SizedBox(
+                          //       height: 20,
+                          //     ),
+                          //     CardComp(),
+                          //     Text(
+                          //       data['Event Name'],
+                          //       style: TextStyle(
+                          //           fontWeight: FontWeight.bold, fontSize: 15),
+                          //     ),
+                          //     Text(data['Description']),
+                          //     Text('${sdate}'),
+                          //     Text('${edate}'),
+                          //   ],
+                          // ),
+                        );
+                      }
+                      return Container();
                     }).toList(),
                   );
           }),

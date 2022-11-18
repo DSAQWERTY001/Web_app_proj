@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:web_prototype/Screens/Components/%E0%B8%BAButton.dart';
 
 import '../Home/home_screen.dart';
+import 'menu_item.dart';
 
 class MyWidget extends StatefulWidget {
   const MyWidget({Key? key}) : super(key: key);
@@ -43,6 +44,12 @@ class _MyWidgetState extends State<MyWidget> {
             ),
           ),
           Spacer(),
+          menuItem(
+            title: "home".toUpperCase(),
+            press: () {
+              Navigator.of(context).pushNamed(HomeScreen.route);
+            },
+          ),
           RButton(
               str: "logout".toUpperCase(),
               press: () async {
@@ -53,6 +60,7 @@ class _MyWidgetState extends State<MyWidget> {
                   ),
                   backgroundColor: Colors.pinkAccent,
                   duration: Duration(milliseconds: 1300),
+                  behavior: SnackBarBehavior.floating,
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 FirebaseAuth.instance.signOut().then((value) {

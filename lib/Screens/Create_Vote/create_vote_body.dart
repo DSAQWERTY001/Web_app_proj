@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:awesome_select/awesome_select.dart';
@@ -59,20 +61,20 @@ class _CreateBodyState extends State<CreateBody> {
   //   Faculty(id: 10, name: "คณะพัฒนาธุรกิจและอุตสาหกรรม"),
   //   Faculty(id: 11, name: "บัณฑิตวิทยาลัย"),
   // ];
-  List<Map> valueSelect = [
-    {
-      'name': 'Faculty',
-      'isCheck': false,
-    },
-    {
-      'name': 'Part of faculty',
-      'isCheck': false,
-    },
-    {
-      'name': 'Id Student',
-      'isCheck': false,
-    },
-  ];
+  // List<Map> valueSelect = [
+  //   {
+  //     'name': 'Faculty',
+  //     'isCheck': false,
+  //   },
+  //   {
+  //     'name': 'Part of faculty',
+  //     'isCheck': false,
+  //   },
+  //   {
+  //     'name': 'Id Student',
+  //     'isCheck': false,
+  //   },
+  // ];
   // List<Map> fac = [
   //   {"name": "คณะครุศาสตร์อุตสาหกรรม", "isChecked": false},
   //   {"name": "คณะวิศวกรรมศาสต", "isChecked": false},
@@ -91,7 +93,6 @@ class _CreateBodyState extends State<CreateBody> {
   // final _items = _faculty
   //     .map((faculty) => MultiSelectItem<Faculty>(faculty, faculty.name))
   //     .toList();
-  List<Faculty> _selectedFaculty = [];
   List<String> DataPart = [];
   final _multiSelectKey = GlobalKey<FormFieldState>();
   String EventName = "";
@@ -209,6 +210,7 @@ class _CreateBodyState extends State<CreateBody> {
                               shrinkWrap: true,
                               itemCount: 2 > _count ? 2 : _count,
                               itemBuilder: (context, int index) {
+                                Candidate_name.add("");
                                 return addTextField(
                                     Candidate_name: Candidate_name,
                                     index: index);
@@ -412,54 +414,6 @@ class _CreateBodyState extends State<CreateBody> {
         SizedBox(
           height: 20,
         ),
-        // SizedBox(
-        //   height: 20,
-        // ),
-        // Row(
-        //   children: [
-        //     RButton(
-        //         str: "EEEEE",
-        //         press: () async {
-        //           String method = 'addMessage';
-        //           String methodArgs = '{"Text":"Hello"}';
-        //           String contractId = 'testb.qwerty_vote.testnet';
-        //           Contract contract = Contract(contractId, connectedAccount);
-        //           await contract.callFunction(method, methodArgs);
-        //           setState(() {});
-        //         },
-        //         bColor: Colors.blue,
-        //         tColor: Colors.white)
-        //   ],
-        // ),
-        // SizedBox(
-        //   height: 20,
-        // ),
-        //ปุ่มสำหรับการสร้าง และยกเลิก event
-
-        // SizedBox(
-        //   height: 20,
-        // ),
-        // CheckSinglechoice(),
-        // children: List.generate(valueSelect.length, (index) {
-        //   try {
-        //     return CheckboxListTile(
-        //         title: Text(valueSelect[index]['name']),
-        //         value: valueSelect[index]['name'],
-        //         onChanged: (value) {
-        //           setState(() {
-        //             for (var element in valueSelect) {
-        //               element['isCheck'] = false;
-        //             }
-        //             valueSelect[index]['isCheck'] = value;
-        //             selectId = valueSelect[index]['name'];
-        //           });
-        //         });
-        //   } catch (error, stack) {
-        //     print(stack);
-        //     throw Exception(
-        //         "Problem while JSON decoding results. [error=${error.toString()}]");
-        //   }
-        // }),
 
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -544,19 +498,6 @@ class _CreateBodyState extends State<CreateBody> {
                     ),
                   ),
                 ),
-                // SizedBox(
-                //   height: 20,
-                // ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     RButton(
-                //         str: "Convert String to array",
-                //         press: () {},
-                //         bColor: Colors.blue,
-                //         tColor: Colors.white)
-                //   ],
-                // ),
               ],
             ),
           ))
@@ -573,34 +514,24 @@ class _CreateBodyState extends State<CreateBody> {
                 final fileBytes = Excelfile.files.first.bytes;
                 var excel = Excel.decodeBytes(fileBytes!);
                 for (var table in excel.tables.keys) {
-                  // print(table); //sheet Name
-                  // print(excel.tables[table]?.maxCols);
-                  // print(excel.tables[table]?.maxRows);
                   for (var row in excel.tables[table]!.rows) {
                     setState(() {
                       _selectedItems.add(row[0]?.value);
                     });
-                    // print(row[0]?.value);
                   }
                 }
-                // print('${file.bytes}');
-                // if (Excelfile != null) {
-                //   print('${Excelfile.files.first.path}');
-                // }
-
-                // List<String> data =
               },
               bColor: Colors.blue,
               tColor: Colors.white,
               bIcon: Icons.download,
               iColor: Colors.white)),
 
-        SizedBox(
-          height: 20,
-        ),
+        // SizedBox(
+        //   height: 20,
+        // ),
         Container(
             width: 600,
-            margin: const EdgeInsets.fromLTRB(50, 0, 0, 0),
+            margin: const EdgeInsets.fromLTRB(50, 20, 0, 0),
             child: Wrap(
               spacing: 3,
               runSpacing: 5,
@@ -616,30 +547,6 @@ class _CreateBodyState extends State<CreateBody> {
                       ))
                   .toList(),
             )),
-        SizedBox(
-          height: 20,
-        ),
-        Row(
-          children: [
-            RButton(
-                str: "enter",
-                press: () async {
-                  // var url =
-                  //     "https://vercel.com/ing9147/e-voting-api-kmutnb-ac-th/9x3foUkDbvCihwHDnPYoCW1udrjy/test";
-                  // var response = Http.get(url).then((response) {
-                  //   print("Response status: ${response.body}");
-                  // });
-                  // showLoadingDialog(context);
-                  print(_selectedItems);
-                  print(response);
-                },
-                bColor: Colors.blue,
-                tColor: Colors.white)
-          ],
-        ),
-        SizedBox(
-          height: 20,
-        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -660,31 +567,93 @@ class _CreateBodyState extends State<CreateBody> {
                                     horizontal: 25, vertical: 15),
                                 color: Colors.blue,
                                 onPressed: () async {
+                                  var datacandi =
+                                      Candidate_name.getRange(0, _count);
                                   if (EdateTime == SdateTime) {
                                     EdateTime = DateTime(
                                         SdateTime.year,
                                         SdateTime.month,
                                         SdateTime.day,
-                                        SdateTime.hour + 1,
-                                        SdateTime.minute,
+                                        SdateTime.hour,
+                                        SdateTime.minute + 55,
                                         SdateTime.millisecond);
                                   }
-                                  List<int> score = List<int>.filled(
-                                      Candidate_name.length, 0);
-                                  FirebaseFirestore.instance
-                                      .collection(user!)
-                                      .add({
-                                    'Event Name': EventName,
-                                    'Description': EventDes,
-                                    'Candidate':
-                                        Candidate_name.getRange(0, _count),
-                                    'Start Date': SdateTime,
-                                    'End Date': EdateTime,
-                                    'Creator': user,
-                                    'Voter': _selectedItems,
-                                    'Score': score,
-                                  });
-                                  Navigator.pushNamed(context, '/vote/create');
+                                  bool check = true;
+                                  if (FirebaseFirestore.instance
+                                          .collection("EventCreate")
+                                          .where('Event Name',
+                                              isEqualTo: EventName) ==
+                                      true) {
+                                    check = false;
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                        title: const Text(
+                                            'Please enter information Event Name is duplicate.'),
+                                        content: const Text(
+                                            'AlertDialog description'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            child: const Text('OK'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  } else {
+                                    for (int i = 0; i < datacandi.length; i++) {
+                                      if (datacandi.elementAt(i) == "" ||
+                                          EventName == '' ||
+                                          _selectedItems.isEmpty) {
+                                        Candidate_name.remove("");
+                                        check = false;
+                                        showLoadingDialog(context);
+                                        break;
+                                      }
+                                    }
+                                  }
+                                  if (check == true) {
+                                    showRepageDialog(context);
+                                    final response = await Http.get(Uri.parse(
+                                        'https://e-voting-api-kmutnb-ac-th.vercel.app/addToTopicArray/$EventName'));
+                                    // fetchAlbum("addToTopicArray", EventName);
+                                    for (int i = 0; i < datacandi.length; i++) {
+                                      final response = await Http.get(Uri.parse(
+                                          'https://e-voting-api-kmutnb-ac-th.vercel.app/addCandidate/$EventName/${datacandi.elementAt(i) == null ? "null" : datacandi.elementAt(i)}'));
+                                    }
+                                    List<String> s = [""];
+                                    List<int> score =
+                                        List<int>.filled(_count, 0);
+                                    FirebaseFirestore.instance
+                                        .collection("EventCreate")
+                                        .add({
+                                      'Event Name': EventName,
+                                      'Description': EventDes,
+                                      'Candidate':
+                                          Candidate_name.getRange(0, _count),
+                                      'Start Date': SdateTime,
+                                      'End Date': EdateTime,
+                                      'Creator': user,
+                                      'Voter': _selectedItems,
+                                      'Score': score,
+                                      'winner': s,
+                                    });
+                                    Navigator.pushNamed(
+                                        context, '/vote/create');
+                                  }
+
+                                  // Candidate_name.remove('');
+                                  // print(Candidate_name[1]);
+
+                                  // try {
+                                  //   print(Candidate_name[1]);
+                                  // } on Exception {
+                                  //   print("object");
+                                  // }
+
+                                  // print(datacandi);
                                 },
                                 child: Text(
                                   "Create Event",
@@ -772,120 +741,11 @@ class _CreateBodyState extends State<CreateBody> {
     }
   }
 
-  // void _showMultiSelect() async {
-  //   // await FirebaseFirestore.instance
-  //   //     .collection('Facuty')
-  //   //     .get()
-  //   //     .then((QuerySnapshot value) {
-  //   //   value.docs.forEach((element) {
-  //   //     var respon = element['สาขา'];
-  //   //   });
-  //   // });
-  //   List<String> facul = [];
-  //   String _title;
-  //   if (selectId == 0) {
-  //     facul = [
-  //       "คณะครุศาสตร์อุตสาหกรรม",
-  //       "คณะวิศวกรรมศาสตร์",
-  //       "วิทยาลัยเทคโนโลยีอุตสาหกรรม",
-  //       "คณะเทคโนโลยีสารสนเทศและนวัตกรรมดิจิทัล",
-  //       "คณะศิลปศาสตร์ประยุกต์",
-  //       "The Sirindhorn TGGS",
-  //       "คณะสถาปัตยกรรมและการออกแบบ",
-  //       "วิทยาลัยนานาชาติ",
-  //       "คณะพัฒนาธุรกิจและอุตสาหกรรม",
-  //       "บัณฑิตวิทยาลัย",
-  //     ];
-  //     _title = "Faculty";
-  //   } else if (selectId == 1) {
-  //     facul = [
-  //       "TM,TTM",
-  //       "TE,TTE",
-  //       "TP",
-  //       "TT",
-  //       "CEE",
-  //       "CED",
-  //       "BBR",
-  //       "BMS",
-  //       "AS",
-  //       "AT",
-  //       "CS",
-  //       "IC",
-  //       "IMI",
-  //       "MA",
-  //       "ASB",
-  //       "BT",
-  //       "FT",
-  //       "ET",
-  //       "MC",
-  //       "EPH",
-  //       "BME",
-  //       "ME",
-  //       "EE",
-  //       "Ch.E",
-  //       "CE",
-  //       "IE",
-  //       "MHE",
-  //       "MATE",
-  //       "InSE",
-  //       "AE",
-  //       "CprE",
-  //       "LE",
-  //       "IEE",
-  //       "E-EE",
-  //       "I-Ch.E",
-  //       "I-IME",
-  //       "Int.D",
-  //       "Cer.D",
-  //       "AAP.D",
-  //       "DM.B",
-  //       "Arch",
-  //       "ITBL",
-  //       "TDET",
-  //       "WdET",
-  //       "PnET",
-  //       "InET",
-  //       "MDET",
-  //       "AmET",
-  //       "RAET",
-  //       "EnET",
-  //       "PoET",
-  //       "MtET",
-  //       "ACET",
-  //       "IPTM",
-  //       "MDT",
-  //       "TDT",
-  //       "EIT",
-  //       "ETT",
-  //       "WDT",
-  //       "PNT",
-  //       "AMT",
-  //       "IPT",
-  //       "MtT",
-  //     ];
-  //     _title = "Part Of Faculty";
-  //   } else {
-  //     _title = "ID Student";
-  //   }
-
-  //   final List<String>? results = await showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return CheckBoxMultiChilde(data: facul, title: _title);
-  //     },
-  //   );
-
-  //   if (results != null) {
-  //     setState(() {
-  //       _selectedItems = results;
-  //     });
-  //   }
-  // }
   static Future<void> showLoadingDialog(BuildContext context) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        title: const Text('AlertDialog Title'),
+        title: const Text('Please enter complete information.'),
         content: const Text('AlertDialog description'),
         actions: <Widget>[
           TextButton(
@@ -896,164 +756,18 @@ class _CreateBodyState extends State<CreateBody> {
       ),
     );
   }
-}
 
-class Faculty {
-  final int id;
-  final String name;
-
-  Faculty({
-    required this.id,
-    required this.name,
-  });
-}
-
-class NEARTester {
-  static loginWithLimitedAccess(walletURL, contractId, accountId, appTitle,
-      signInSuccessUrl, signInFailureUrl) {
-    // Generate Keys
-    var keyPair = KeyStore.newKeyPair();
-
-    // Open near wallet in default browser
-    Account account = Account(
-        accountId: accountId,
-        keyPair: keyPair,
-        provider: NEARTestNetRPCProvider());
-
-    var wallet = Wallet(walletURL);
-    wallet.connect(contractId, appTitle, signInSuccessUrl, signInFailureUrl,
-        account.publicKey);
-
-    return account; //connected account
-  }
-
-  static loginWithFullAccess(walletURL, contractId, accountId, appTitle,
-      signInSuccessUrl, signInFailureUrl) {
-    // Generate Keys
-    var keyPair = KeyStore.newKeyPair();
-    var publicKey = KeyStore.publicKeyToString(keyPair.publicKey);
-
-    // Open near wallet in default browser
-    var wallet = Wallet(walletURL);
-
-    wallet.connectWithFullAccess(
-        contractId, appTitle, signInSuccessUrl, signInFailureUrl, publicKey);
-
-    Account account = Account(
-        accountId: accountId,
-        keyPair: keyPair,
-        provider: NEARTestNetRPCProvider());
-
-    return account; //connected account
-  }
-
-  //contract holds the account to use for calling
-  static callMethodLimitedAccess(Contract contract, String method, args) async {
-    var result = await contract.callFunction(method, args);
-    return result;
-  }
-
-  static callViewMethod(Contract contract, String method, args) async {
-    var result = await contract.callViewFuntion(method, args);
-    return result;
-  }
-
-  //contract holds the account to use for calling - account must have a full access key
-  static callMethodFullAccess(Contract contract, String method, args) async {
-    await contract.callFunction(method, args);
-  }
-
-  static callMethodFullAccessWithDeposit(
-      Contract contract, String method, args, nearAmount) async {
-    var result = await contract.callFunction(method, args, nearAmount);
-    return result;
-  }
-
-  static callMethodLimitedAccessWithDeposit(
-      Contract contract,
-      String method,
-      String walletURL,
-      args,
-      nearAmount,
-      successUrl,
-      failureUrl,
-      approvalURL) async {
-    // Open near wallet in default browser
-    var wallet = Wallet(walletURL);
-
-    var result = await contract.callFunctionWithDeposit(
-        method, args, wallet, nearAmount, successUrl, failureUrl, approvalURL);
-    return result;
-  }
-
-  static transferNear(Account account, nearAmount, receiver) async {
-    var result = await account.sendTokens(nearAmount, receiver);
-    return result;
+  static Future<void> showRepageDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => SimpleDialog(
+        title: const Text('Please Wait a minute'),
+        children: [
+          Container(
+            child: Center(child: CircularProgressIndicator()),
+          ),
+        ],
+      ),
+    );
   }
 }
-
-// class CheckSinglechoice extends StatefulWidget {
-//   CheckSinglechoice({Key? key}) : super(key: key);
-
-//   @override
-//   State<CheckSinglechoice> createState() => _CheckSinglechoiceState();
-// }
-
-// class _CheckSinglechoiceState extends State<CheckSinglechoice> {
-//   String selected = "";
-
-//   List checkListItems = [
-//     {
-//       "id": 0,
-//       "value": false,
-//       "title": "Faculty",
-//     },
-//     {
-//       "id": 1,
-//       "value": false,
-//       "title": "Part of Faculty",
-//     },
-//     {
-//       "id": 2,
-//       "value": false,
-//       "title": "Id Student",
-//     },
-//   ];
-
-//   @override
-//   void initState() {
-//     super.initState();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       children: List.generate(
-//         checkListItems.length,
-//         (index) => CheckboxListTile(
-//           controlAffinity: ListTileControlAffinity.leading,
-//           contentPadding: EdgeInsets.zero,
-//           dense: true,
-//           title: Text(
-//             checkListItems[index]["title"],
-//             style: const TextStyle(
-//               fontSize: 16.0,
-//               color: Colors.black,
-//             ),
-//           ),
-//           value: checkListItems[index]["value"],
-//           onChanged: (value) {
-//             setState(() {
-//               for (var element in checkListItems) {
-//                 element["value"] = false;
-//               }
-//               checkListItems[index]["value"] = value;
-//               selected =
-//                   "${checkListItems[index]["id"]}, ${checkListItems[index]["title"]}, ${checkListItems[index]["value"]}";
-//             });
-//           },
-//         ),
-//       ),
-//     );
-//   }
-// }

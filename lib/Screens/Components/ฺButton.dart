@@ -20,7 +20,6 @@ class RButton extends StatelessWidget {
       child: TextButton(
         style: TextButton.styleFrom(
           padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-          // onSurface: bColor,
           backgroundColor: bColor,
         ),
         onPressed: press,
@@ -57,9 +56,11 @@ class RButtonIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(25),
-      child: FlatButton.icon(
-        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-        color: bColor,
+      child: TextButton.icon(
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+          backgroundColor: bColor,
+        ),
         onPressed: press,
         label: Text(
           str,

@@ -562,10 +562,12 @@ class _CreateBodyState extends State<CreateBody> {
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(25),
-                              child: FlatButton(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 25, vertical: 15),
-                                color: Colors.blue,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 25, vertical: 15),
+                                  backgroundColor: Colors.blue,
+                                ),
                                 onPressed: () async {
                                   var datacandi =
                                       Candidate_name.getRange(0, _count);

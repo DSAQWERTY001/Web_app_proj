@@ -1,50 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:web_prototype/Fotter/footer.dart';
+import 'package:web_prototype/Navbar/Navbar.dart';
 import 'package:web_prototype/Screens/Components/app_bar.dart';
 import 'package:web_prototype/Screens/Components/body.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 
-class DogService {
-  static randomDog() {
-    // http.get(Uri.parse(
-    //     'https://e-voting-api-kmutnb-ac-th.vercel.app/addToTopicArray/ONG'));
-  }
-}
-
-// Future<http.Response> createAlbum() {
-//   return http.post(
-//     Uri.parse(
-//         'https://e-voting-api-kmutnb-ac-th.vercel.app/addToTopicArray/TestFromFlutter'),
-//   );
-// }
-
-Future<Album> fetchAlbum() async {
-  String a = 'test';
-  final response = await http
-      .get(Uri.parse('https://e-voting-api-kmutnb-ac-th.vercel.app/$a'));
-
-  if (response.statusCode == 200) {
-    return Album.fromJson(jsonDecode(response.body));
-  } else {
-    throw Exception('Failed to load album');
-  }
-}
-
-class Album {
-  final String title;
-
-  const Album({
-    required this.title,
-  });
-
-  factory Album.fromJson(Map<String, dynamic> json) {
-    return Album(
-      title: json['title'],
-    );
-  }
-}
+import '../../Landingpage/LandingPage.dart';
+import '../../aboutus/AboutUs.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -55,13 +20,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<Album> futureAlbum;
+  // final homeKey = GlobalKey();
+  // final aboutKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
-    DogService.randomDog();
-    futureAlbum = fetchAlbum();
     // createAlbum();
   }
 
@@ -70,32 +34,71 @@ class _HomeScreenState extends State<HomeScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
-        height: size.height,
-        width: size.width,
-        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          VoteAppBar(),
-          // Spacer(
-          //   flex: 1,
-          // ),
-          // Body(),
-          // Spacer(),
-          Center(
-            child: FutureBuilder<Album>(
-              future: futureAlbum,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Text(snapshot.data!.title);
-                } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
-                }
-
-                // By default, show a loading spinner.
-                return const CircularProgressIndicator();
-              },
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                Color.fromARGB(255, 44, 195, 255),
+                Color.fromARGB(255, 0, 74, 104)
+              ]),
+        ),
+        child: SingleChildScrollView(
+            child: Column(
+          children: <Widget>[
+            MediaQuery.of(context).size.width > 1000 ? VoteAppBar() : Navbar(),
+            Padding(
+              // key: homeKey,
+              padding:
+                  const EdgeInsets.symmetric(vertical: 20.0, horizontal: 40.0),
+              child: LandingPage(),
             ),
-          ),
-        ]),
+            Padding(
+              // key: aboutKey,
+              padding:
+                  const EdgeInsets.symmetric(vertical: 5.0, horizontal: 40.0),
+              child: AboutUs(),
+            ),
+            MediaQuery.of(context).size.width > 1000 ? Footer() : Container()
+          ],
+        )),
       ),
+      // body: SingleChildScrollView(
+      //   child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      //     Navbar(),
+      //     Padding(
+      //       padding:
+      //           const EdgeInsets.symmetric(vertical: 20.0, horizontal: 40.0),
+      //       child: LandingPage(),
+      //     ),
+      //     Padding(
+      //       padding:
+      //           const EdgeInsets.symmetric(vertical: 5.0, horizontal: 40.0),
+      //       child: AboutUs(),
+      //     ),
+      //     // VoteAppBar(),
+      //     // Center(
+      //     //   child: FutureBuilder<Album>(
+      //     //     future: futureAlbum,
+      //     //     builder: (context, snapshot) {
+      //     //       if (snapshot.hasData) {
+      //     //         return Text(snapshot.data!.title);
+      //     //       } else if (snapshot.hasError) {
+      //     //         return Text('${snapshot.error}');
+      //     //       }
+
+      //     //       // By default, show a loading spinner.
+      //     //       return const CircularProgressIndicator();
+      //     //     },
+      //     //   ),
+      //     // ),
+      //   ]),
+      // ),
     );
   }
 }
+
+// Future scrollToItem(GlobalKey key) async {
+//   final context = key.currentContext!;
+//   await Scrollable.ensureVisible(context);
+// }

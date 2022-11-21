@@ -21,13 +21,14 @@ class VoteAppBar extends StatefulWidget {
 }
 
 class _VoteAppBarState extends State<VoteAppBar> {
+  // final homeKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(20),
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.fromLTRB(2, 2, 20, 2),
       decoration: BoxDecoration(
-        color: Colors.blue,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(46),
         boxShadow: [
           BoxShadow(
@@ -39,12 +40,16 @@ class _VoteAppBarState extends State<VoteAppBar> {
       ),
       child: Row(
         children: [
+          Image.asset(
+            "assets/images/BlLogo22.png",
+            scale: 10,
+          ),
           Text(
-            "Logo.png",
+            " KMUTNB VOTING BY BLOCKCHAIN",
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Colors.blue,
             ),
           ),
           Spacer(),
@@ -54,21 +59,22 @@ class _VoteAppBarState extends State<VoteAppBar> {
               press: () {
                 Navigator.pushNamed(context, '/vote/create');
               },
+              color: Colors.blue,
             )),
           menuItem(
             title: "home".toUpperCase(),
             press: () {
               Navigator.of(context).pushNamed(HomeScreen.route);
             },
+            color: Colors.blue,
           ),
           menuItem(
-              title: "about us".toUpperCase(),
-              press: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DashboardPage()),
-                );
-              }),
+            title: "about us".toUpperCase(),
+            press: () async {
+              Navigator.of(context).pushNamed(HomeScreen.route);
+            },
+            color: Colors.blue,
+          ),
           if (FirebaseAuth.instance.currentUser != null)
             (RButton(
                 str: "logout".toUpperCase(),
@@ -76,7 +82,7 @@ class _VoteAppBarState extends State<VoteAppBar> {
                   SnackBar snackBar = SnackBar(
                     content: Text(
                       "Loging out...",
-                      style: TextStyle(fontSize: 36, color: Colors.white),
+                      style: TextStyle(fontSize: 36, color: Colors.blue),
                     ),
                     backgroundColor: Colors.red,
                     behavior: SnackBarBehavior.floating,
@@ -89,16 +95,16 @@ class _VoteAppBarState extends State<VoteAppBar> {
                     });
                   });
                 },
-                bColor: Colors.white,
-                tColor: Colors.blue))
+                bColor: Colors.blue,
+                tColor: Colors.white))
           else
             (RButton(
                 str: "login".toUpperCase(),
                 press: () {
                   Navigator.of(context).pushNamed(LoginScreen.route);
                 },
-                bColor: Colors.white,
-                tColor: Colors.blue)),
+                bColor: Colors.blue,
+                tColor: Colors.white)),
         ],
       ),
     );

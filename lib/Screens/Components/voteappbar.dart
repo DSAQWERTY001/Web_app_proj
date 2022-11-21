@@ -49,6 +49,7 @@ class _MyWidgetState extends State<MyWidget> {
             press: () {
               Navigator.of(context).pushNamed(HomeScreen.route);
             },
+            color: Colors.white,
           ),
           RButton(
               str: "logout".toUpperCase(),

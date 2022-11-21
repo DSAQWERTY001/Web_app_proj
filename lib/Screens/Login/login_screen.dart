@@ -140,10 +140,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(25),
-                    child: FlatButton(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                      color: Colors.blue,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                        primary: Colors.blue,
+                      ),
                       onPressed: signIn,
                       child: Text(
                         "login".toUpperCase(),

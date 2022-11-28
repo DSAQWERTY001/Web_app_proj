@@ -21,7 +21,7 @@ class _MyWidgetState extends State<MyWidget> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(20),
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.fromLTRB(2, 2, 20, 2),
       decoration: BoxDecoration(
         color: Colors.blue,
         borderRadius: BorderRadius.circular(46),
@@ -35,13 +35,14 @@ class _MyWidgetState extends State<MyWidget> {
       ),
       child: Row(
         children: [
+          Image.asset(
+            "assets/images/BlLogo22.png",
+            scale: 10,
+          ),
           Text(
-            "Logo.png",
+            " KMUTNB VOTING BY BLOCKCHAIN",
             style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+                fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
           ),
           Spacer(),
           menuItem(

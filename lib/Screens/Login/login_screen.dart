@@ -54,8 +54,15 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Image.asset(
+                    "assets/images/BlLogo22.png",
+                    scale: 4,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Text(
-                    "login page".toUpperCase(),
+                    "login kmutnb voting".toUpperCase(),
                     style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Color.fromRGBO(33, 150, 243, 1),
                         fontWeight: FontWeight.bold),
@@ -189,15 +196,15 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       backgroundColor: Colors.blue,
       behavior: SnackBarBehavior.floating,
-      duration: Duration(milliseconds: 2500),
+      duration: Duration(milliseconds: 1000),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
     Dialogs();
-    User? currentUser;
     await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: user, password: pass)
         .then((values) {
-      currentUser = values.user;
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const HomeScreen()));
     }).catchError((onError) {
       final snackBar = SnackBar(
         content: Text(
@@ -210,30 +217,6 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     });
-
-    if (currentUser != null) {
-      await FirebaseFirestore.instance
-          .collection("admins")
-          .doc(currentUser!.uid)
-          .get()
-          .then((snap) {
-        if (!snap.exists) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()));
-        } else {
-          FirebaseAuth.instance.signOut();
-          SnackBar snackBar = SnackBar(
-            content: Text(
-              "you are not admin",
-              style: TextStyle(fontSize: 36, color: Colors.black),
-            ),
-            backgroundColor: Colors.pinkAccent,
-            duration: Duration(milliseconds: 1800),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        }
-      });
-    }
   }
 }
 

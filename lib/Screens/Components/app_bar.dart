@@ -1,7 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:async';
+import 'dart:html';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:web_prototype/Screens/Components/%E0%B8%BAButton.dart';
@@ -53,6 +55,21 @@ class _VoteAppBarState extends State<VoteAppBar> {
             ),
           ),
           Spacer(),
+          // if (FirebaseFirestore.instance
+          //         .collection("superadmins")
+          //         .doc(FirebaseAuth.instance.currentUser!.uid)
+          //         .get() !=
+          //     null)
+          //   (menuItem(
+          //     title: "Admiun",
+          //     press: () {
+          //       Navigator.push(
+          //           context,
+          //           MaterialPageRoute(
+          //               builder: (context) => const regisAdmin()));
+          //     },
+          //     color: Colors.blue,
+          //   )),
           if (FirebaseAuth.instance.currentUser != null)
             (menuItem(
               title: "Creation Vote",

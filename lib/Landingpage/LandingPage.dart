@@ -31,7 +31,7 @@ class LandingPage extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(20.0))),
               onPressed: () async {
                 await launchUrl(Uri.parse(
-                    "https://drive.google.com/file/d/1gXNsSODjIdN8PUBIJM8jlOXMeT7j9_5E/view?usp=sharing"));
+                    "https://drive.google.com/file/d/1LMtt7pJkuI4lBG3YOobfr9rumeSGxlhG/view?usp=sharing"));
               },
               child: Padding(
                   padding: const EdgeInsets.symmetric(

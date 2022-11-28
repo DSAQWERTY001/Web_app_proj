@@ -74,7 +74,7 @@ class _createVoteScreenState extends State<createVoteScreen> {
                             width: 20,
                           ),
                           RButton(
-                            str: "Create",
+                            str: "Create Event",
                             press: () {
                               setState(() {
                                 _page = 1;
@@ -121,7 +121,7 @@ class _createVoteScreenState extends State<createVoteScreen> {
                             width: 20,
                           ),
                           RButton(
-                            str: "Create",
+                            str: "Create Event",
                             press: () {
                               setState(() {
                                 _page = 1;

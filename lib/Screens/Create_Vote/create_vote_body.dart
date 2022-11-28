@@ -41,7 +41,7 @@ class _CreateBodyState extends State<CreateBody> {
   DateTime SdateTime = DateTime.now();
   DateTime EdateTime = DateTime.now();
   late int _count;
-  int selectId = 0;
+  int selectId = 1;
   int addtextIndex = 1;
   String? selectedValue;
   String nameID = "Facuty";
@@ -135,10 +135,20 @@ class _CreateBodyState extends State<CreateBody> {
                   SizedBox(
                     height: 30,
                   ),
-                  Text(
-                    "Event",
-                    style: TextStyle(
-                        color: Colors.blue, fontWeight: FontWeight.bold),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "* ",
+                        style: TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        "Event",
+                        style: TextStyle(
+                            color: Colors.blue, fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 10,
@@ -198,10 +208,20 @@ class _CreateBodyState extends State<CreateBody> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    "Candidate",
-                    style: TextStyle(
-                        color: Colors.blue, fontWeight: FontWeight.bold),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "* ",
+                        style: TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        "Candidate",
+                        style: TextStyle(
+                            color: Colors.blue, fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                   Row(
                     children: [
@@ -417,45 +437,79 @@ class _CreateBodyState extends State<CreateBody> {
 
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(
-            2,
-            (index) {
-              return Row(
-                children: [
-                  SizedBox(
-                    width: 18,
-                  ),
-                  Checkbox(
-                    value: selectId == index,
-                    onChanged: (checked) {
-                      if (checked == true) {
-                        setState(() => selectId = index);
-                        _selectedItems.clear();
-                      }
-                    },
-                    materialTapTargetSize: MaterialTapTargetSize.padded,
-                  ),
-                  SizedBox(
-                    width: 30,
-                  )
-                ],
-              );
-            },
-          ),
+          children: [
+            Text(
+              "* ",
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Radio(
+              value: 1,
+              groupValue: selectId,
+              onChanged: (val) => setState(() {
+                selectId = val! as int;
+              }),
+            ),
+            SizedBox(
+              width: 60,
+            ),
+            Radio(
+              value: 2,
+              groupValue: selectId,
+              onChanged: (val) => setState(() {
+                selectId = val! as int;
+                _selectedItems.clear();
+              }),
+            ),
+          ],
         ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: List.generate(
+        //     2,
+        //     (index) {
+        //       return Row(
+        //         children: [
+        //           SizedBox(
+        //             width: 18,
+        //           ),
+        //           Radio(
+        //             value: selectId == index,
+        //             onChanged: (checked) {
+        //               if (checked == true) {
+        //                 setState(() => selectId = index);
+        //                 _selectedItems.clear();
+        //               }
+        //             },
+        //             materialTapTargetSize: MaterialTapTargetSize.padded,
+        //             groupValue: index,
+        //           ),
+        //           SizedBox(
+        //             width: 30,
+        //           )
+        //         ],
+        //       );
+        //     },
+        //   ),
+        // ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(
+              width: 25,
+            ),
             Text(
-              "ID Student",
-              style: TextStyle(fontWeight: FontWeight.bold),
+              "ID KMUTNB",
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
             ),
             SizedBox(
               width: 20,
             ),
             Text(
-              "Improt Excel",
-              style: TextStyle(fontWeight: FontWeight.bold),
+              "Import Excel",
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
             ),
             // SizedBox(
             //   width: 15,
@@ -465,11 +519,17 @@ class _CreateBodyState extends State<CreateBody> {
         SizedBox(
           height: 20,
         ),
-        if (selectId == 0)
+        if (selectId == 1)
           (Container(
             width: 600,
             child: Column(
               children: [
+                Text("Ex  :  s62...........,abs.....,s61...........",
+                    style: TextStyle(
+                        color: Colors.blue, fontWeight: FontWeight.bold)),
+                SizedBox(
+                  height: 5,
+                ),
                 TextField(
                   onChanged: (value) {
                     IdStudent = value;
@@ -489,7 +549,7 @@ class _CreateBodyState extends State<CreateBody> {
                       borderSide: BorderSide(color: Colors.amber, width: 2),
                       borderRadius: BorderRadius.all(Radius.circular(22)),
                     ),
-                    labelText: " ID Student",
+                    labelText: " ID KMUTNB",
                     labelStyle:
                         TextStyle(color: Color.fromARGB(255, 127, 197, 255)),
                     icon: Icon(
@@ -503,7 +563,7 @@ class _CreateBodyState extends State<CreateBody> {
           ))
         else
           (RButtonIcon(
-              str: "Improt Excel",
+              str: "Import Excel",
               press: () async {
                 final Excelfile = await FilePicker.platform.pickFiles(
                   allowMultiple: true,
@@ -581,20 +641,25 @@ class _CreateBodyState extends State<CreateBody> {
                                         SdateTime.millisecond);
                                   }
                                   bool check = true;
-                                  if (FirebaseFirestore.instance
-                                          .collection("EventCreate")
-                                          .where('Event Name',
-                                              isEqualTo: EventName) ==
-                                      true) {
+                                  var checkname = "";
+                                  await FirebaseFirestore.instance
+                                      .collection("EventCreate")
+                                      .where('Event Name', isEqualTo: EventName)
+                                      .get()
+                                      .then((QuerySnapshot querySnapshot) {
+                                    querySnapshot.docs.forEach((doc) {
+                                      checkname = doc["Event Name"];
+                                    });
+                                  });
+                                  if (checkname == EventName) {
                                     check = false;
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) =>
                                           AlertDialog(
-                                        title: const Text(
-                                            'Please enter information Event Name is duplicate.'),
+                                        title: const Text('Error'),
                                         content: const Text(
-                                            'AlertDialog description'),
+                                            'Event Name is duplicate.'),
                                         actions: <Widget>[
                                           TextButton(
                                             onPressed: () =>
@@ -646,7 +711,7 @@ class _CreateBodyState extends State<CreateBody> {
                                         context, '/vote/create');
                                   }
 
-                                  // Candidate_name.remove('');
+                                  Candidate_name.remove('');
                                   // print(Candidate_name[1]);
 
                                   // try {

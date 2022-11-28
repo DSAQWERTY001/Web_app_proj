@@ -3,6 +3,7 @@ import 'dart:html';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as Http;
 
 class CardComp extends StatefulWidget {
   final String? TitleText;
@@ -118,6 +119,7 @@ class CardExpo extends StatelessWidget {
   final List<dynamic> score;
   final List<dynamic> winner;
   final int allvoter;
+  final String doc;
   const CardExpo({
     Key? key,
     required this.TextTitle,
@@ -129,6 +131,7 @@ class CardExpo extends StatelessWidget {
     required this.score,
     required this.winner,
     required this.allvoter,
+    required this.doc,
   }) : super(key: key);
 
   @override
@@ -156,58 +159,111 @@ class CardExpo extends StatelessWidget {
           margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
           child: Container(
             child: ListTile(
-                // enabled: true,
-                enabled: check,
-                onTap: () async {
-                  showLoadingDialog(context);
-                },
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                leading: Container(
-                    padding: EdgeInsets.only(right: 12.0),
-                    decoration: new BoxDecoration(
-                        border: new Border(
-                            right: new BorderSide(
-                                width: 1.0, color: Colors.amber))),
-                    child: RichText(
-                        text: TextSpan(children: [
-                      TextSpan(
-                          text: 'Status\n  ',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: Colors.white)),
-                      WidgetSpan(
-                          child: Icon(
-                        Icons.fiber_manual_record,
-                        color: check ? Colors.green : Colors.red,
-                      ))
-                    ]))
-                    // child: Icon(
-                    //   Icons.autorenew,
-                    //   color: Colors.white,
-                    // ),
-                    ),
-                title: Text(
-                  TextTitle,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18),
-                ),
-                // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
+              // enabled: true,
+              enabled: check,
+              onTap: () async {
+                showLoadingDialog(context);
+              },
+              contentPadding:
+                  EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+              leading: Container(
+                  padding: EdgeInsets.only(right: 12.0),
+                  decoration: new BoxDecoration(
+                      border: new Border(
+                          right:
+                              new BorderSide(width: 1.0, color: Colors.amber))),
+                  child: RichText(
+                      text: TextSpan(children: [
+                    TextSpan(
+                        text: 'Status\n  ',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Colors.white)),
+                    WidgetSpan(
+                        child: Icon(
+                      Icons.fiber_manual_record,
+                      color: check ? Colors.green : Colors.red,
+                    ))
+                  ]))
+                  // child: Icon(
+                  //   Icons.autorenew,
+                  //   color: Colors.white,
+                  // ),
+                  ),
+              title: Text(
+                TextTitle,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
+              ),
+              // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
 
-                subtitle: Row(
-                  children: <Widget>[
-                    // Icon(Icons.linear_scale, color: Colors.yellowAccent),
-                    Text(Descrip, style: TextStyle(color: Colors.white70))
-                  ],
+              subtitle: Row(
+                children: <Widget>[
+                  // Icon(Icons.linear_scale, color: Colors.yellowAccent),
+                  Column(
+                    children: [
+                      Text("Start : " + StaDate.toString().substring(0, 16),
+                          style: TextStyle(color: Colors.white70)),
+                      Text("End   : " + EndDate.toString().substring(0, 16),
+                          style: TextStyle(color: Colors.white70))
+                    ],
+                  ),
+                ],
+              ),
+              trailing: InkWell(
+                onTap: () async {
+                  Dialogcon(context);
+                },
+                child: Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                  size: 30,
                 ),
-                trailing: Icon(Icons.keyboard_arrow_right,
-                    color: Colors.white, size: 30.0)),
+              ),
+            ),
           ),
         );
       },
+    );
+  }
+
+  Future<void> Dialogcon(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text("Alert"),
+        content: Text("Do you want to Delete"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              'cancel',
+              // style: TextStyle(color: Colors.red),
+            ),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () {
+              Navigator.pop(context);
+              showRepageDialog(context);
+              FirebaseFirestore.instance
+                  .collection("EventCreate")
+                  .doc(doc)
+                  .delete();
+              final response = Http.get(Uri.parse(
+                  'https://e-voting-api-kmutnb-ac-th.vercel.app/eventEnd/$TextTitle'));
+              Navigator.pop(context);
+            },
+            child: const Text(
+              'Comfirm',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -230,13 +286,12 @@ class CardExpo extends StatelessWidget {
     return showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        title: Text(TextTitle),
+        title: Center(child: Text(TextTitle)),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(Descrip + "\n"),
-
+              if (Descrip != "") (Text(Descrip + "\n")),
               Container(
                 child: Row(
                   children: [
@@ -263,7 +318,7 @@ class CardExpo extends StatelessWidget {
               ),
 
               SizedBox(
-                height: 15,
+                height: 10,
               ),
               Row(
                 children: [
@@ -272,7 +327,7 @@ class CardExpo extends StatelessWidget {
                     children: [
                       Text("All Voter : " + allvoter.toString()),
                       SizedBox(
-                        height: 5,
+                        height: 10,
                       ),
                       Text("All Voted : " + resultvoted.toInt().toString()),
                     ],
@@ -281,6 +336,13 @@ class CardExpo extends StatelessWidget {
               ),
               SizedBox(
                 height: 15,
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Text("Candidate"),
+                Text("Score"),
+              ]),
+              SizedBox(
+                height: 13,
               ),
               Container(
                   child: Row(
@@ -292,7 +354,7 @@ class CardExpo extends StatelessWidget {
                           children: [
                             SizedBox(
                               width: 200,
-                              child: Text(e + "\n"),
+                              child: Text("  " + e + "\n"),
                             ),
                             SizedBox(
                               width: 40,
@@ -305,7 +367,7 @@ class CardExpo extends StatelessWidget {
                         .map((e) => Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text(e.toString() + "\n"),
+                                Text(e.toString() + "  " + "\n"),
                               ],
                             ))
                         .toList(),
@@ -313,30 +375,8 @@ class CardExpo extends StatelessWidget {
                 ],
               )),
               // Text("${alldata.length}"),
-              Text("Start : " +
-                  StaDate.day.toString() +
-                  "-" +
-                  StaDate.month.toString() +
-                  "-" +
-                  StaDate.year.toString() +
-                  "   " +
-                  StaDate.hour.toString() +
-                  ":" +
-                  ts +
-                  StaDate.minute.toString() +
-                  "\n"),
-              Text("End : " +
-                  EndDate.day.toString() +
-                  "-" +
-                  EndDate.month.toString() +
-                  "-" +
-                  EndDate.year.toString() +
-                  "   " +
-                  EndDate.hour.toString() +
-                  ":" +
-                  tn +
-                  EndDate.minute.toString() +
-                  "\n"),
+              Text("Start : " + StaDate.toString().substring(0, 16) + "\n"),
+              Text("End   : " + EndDate.toString().substring(0, 16) + "\n"),
             ],
           ),
         ),
@@ -344,6 +384,20 @@ class CardExpo extends StatelessWidget {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static Future<void> showRepageDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => SimpleDialog(
+        title: const Text('Please Wait a minute'),
+        children: [
+          Container(
+            child: Center(child: CircularProgressIndicator()),
           ),
         ],
       ),

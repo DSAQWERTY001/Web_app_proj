@@ -54,7 +54,6 @@ class _DashboardPageState extends State<DashboardPage> {
                       //     //  print("getData = ${doc["item_text_"]}");
                       //   });
                       // });
-
                       Map<String, dynamic> dataM =
                           document.data()! as Map<String, dynamic>;
                       List<dynamic> vot = dataM['Voter'];
@@ -110,6 +109,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             score: dataM['Score'],
                             winner: dataM['winner'],
                             allvoter: vot.length,
+                            doc: document.id,
                           ),
                           // child: Column(
                           //   mainAxisAlignment: MainAxisAlignment.center,

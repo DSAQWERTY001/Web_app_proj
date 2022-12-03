@@ -57,6 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Image.asset(
                     "assets/images/BlLogo22.png",
                     scale: 4,
+                    filterQuality: FilterQuality.high,
                   ),
                   SizedBox(
                     height: 10,

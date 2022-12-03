@@ -45,6 +45,7 @@ class _VoteAppBarState extends State<VoteAppBar> {
           Image.asset(
             "assets/images/BlLogo22.png",
             scale: 10,
+            filterQuality: FilterQuality.high,
           ),
           Text(
             " KMUTNB VOTING BY BLOCKCHAIN",

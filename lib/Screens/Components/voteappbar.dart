@@ -38,6 +38,7 @@ class _MyWidgetState extends State<MyWidget> {
           Image.asset(
             "assets/images/BlLogo22.png",
             scale: 10,
+            filterQuality: FilterQuality.high,
           ),
           Text(
             " KMUTNB VOTING BY BLOCKCHAIN",
